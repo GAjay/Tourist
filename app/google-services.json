@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1087169211115",
+    "firebase_url": "https://tourist-e68cf.firebaseio.com",
+    "project_id": "tourist-e68cf",
+    "storage_bucket": "tourist-e68cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087169211115:android:6998ed16ba443074",
+        "android_client_info": {
+          "package_name": "com.shuvojitkar.tourist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087169211115-lep9arq60kstn05e9hopipuimv9bshmk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shuvojitkar.tourist",
+            "certificate_hash": "1046867ddb6833990a8b9b55558270d3bb1184f5"
+          }
+        },
+        {
+          "client_id": "1087169211115-0repj1fc4vhp8nlgodnmts21oe3s4bhh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3ikIxuulbeg0FEHL3jxWV3Uf0stm-nDY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087169211115-0repj1fc4vhp8nlgodnmts21oe3s4bhh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

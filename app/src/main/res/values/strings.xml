@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Tourist</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="display_name">Display Name</string>
+    <string name="create_account">Create Account</string>
+    <string-array name="account_type">
+        <item>Tourist Guide</item>
+        <item>Traveler</item>
+    </string-array>
+</resources>

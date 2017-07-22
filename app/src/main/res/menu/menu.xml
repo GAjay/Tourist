@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:id="@+id/menu_home"/>
+    <item android:title="Create Account"
+        android:id="@+id/menu_create_actcount"/>
+    <item android:title="Admin "
+        android:id="@+id/menu_admin"/>
+    <item android:title="Tourist Guide"
+        android:id="@+id/menu_tourist"/>
+    <item
+        android:id="@+id/menu_user_profile"
+        android:title="User Profile" />
+
+</menu>
