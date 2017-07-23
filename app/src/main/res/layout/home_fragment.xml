@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/bmb"
-        android:layout_gravity="bottom|end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:bmb_buttonEnum="simpleCircle"
-        app:bmb_piecePlaceEnum="piecePlace_dot_3_4"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_3_4"
-        />
 
-</android.support.design.widget.CoordinatorLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:id="@+id/home_recView"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

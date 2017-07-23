@@ -12,10 +12,10 @@ import com.shuvojitkar.tourist.R;
  * Created by SHOBOJIT on 7/22/2017.
  */
 
-public class Admin_Fragment extends Fragment {
+public class Guide_List_Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.admin_fragment,container,false);
+        return inflater.inflate(R.layout.guide_fragment,container,false);
     }
 }

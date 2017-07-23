@@ -4,14 +4,25 @@
 
     <item android:title="Home"
         android:id="@+id/menu_home"/>
-    <item android:title="Create Account"
-        android:id="@+id/menu_create_actcount"/>
-    <item android:title="Admin "
-        android:id="@+id/menu_admin"/>
-    <item android:title="Tourist Guide"
-        android:id="@+id/menu_tourist"/>
+
     <item
-        android:id="@+id/menu_user_profile"
-        android:title="User Profile" />
+        android:id="@+id/menu_profile"
+        android:title="Profile" />
+    <item android:title="Tourist Guide "
+        android:id="@+id/menu_guide"/>
+
+    <item
+        android:id="@+id/menu_tourist"
+        android:title="Traveler" />
+
+    <item
+        android:id="@+id/menu_estimated_budget"
+        android:title="Estimated Budget" />
+    <item
+        android:id="@+id/menu_need_help"
+        android:title="Need Help" />
+    <item
+        android:id="@+id/menu_exit"
+        android:title="Exit" />
 
 </menu>

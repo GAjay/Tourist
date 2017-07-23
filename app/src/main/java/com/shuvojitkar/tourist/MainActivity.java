@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.shuvojitkar.tourist.Fragment.Admin_Fragment;
+import com.shuvojitkar.tourist.Fragment.Guide_List_Fragment;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
 
@@ -92,15 +92,15 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
                 LoadHomeFragment();
         }
-        else if(menuitem==R.id.menu_create_actcount){
+        else if(menuitem==R.id.menu_profile){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=2)
                 Load_Register();
         }
-        else if(menuitem==R.id.menu_admin){
+        else if(menuitem==R.id.menu_guide){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=3)
-                Load_Admin();
+                Load_Guide_list();
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
     }
 
-    public void Load_Admin(){
+    public void Load_Guide_list(){
         FragIndex=3;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             public void run() {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.homeframe,new Admin_Fragment(),"Admin")
+                        .replace(R.id.homeframe,new Guide_List_Fragment(),"Admin")
                         .commit();
             }
         };
