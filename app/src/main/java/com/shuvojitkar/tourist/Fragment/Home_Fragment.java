@@ -1,6 +1,7 @@
 package com.shuvojitkar.tourist.Fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
+import com.shuvojitkar.tourist.Activity.DetailActivity;
 import com.shuvojitkar.tourist.GetFirebaseRef;
 import com.shuvojitkar.tourist.Model.Home_frag_Model;
 import com.shuvojitkar.tourist.R;
@@ -60,14 +62,37 @@ public class Home_Fragment extends Fragment {
                         mUserDatabase
                 ) {
                     @Override
-                    protected void populateViewHolder(HomePageViewHolder viewHolder, Home_frag_Model model, int position) {
+                    protected void populateViewHolder(HomePageViewHolder viewHolder, final Home_frag_Model model, int position) {
                         viewHolder.setImage(model.getImage());
                         viewHolder.setName(model.getName());
                      //   Toast.makeText(v.getContext(), model.getName(), Toast.LENGTH_SHORT).show();
+
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent in = new Intent(v.getContext(),DetailActivity.class);
+                            Bundle b = new Bundle();
+
+                            Bundle extras = new Bundle();
+                            extras.putString("Lang",String.valueOf(model.getLang()));
+                            extras.putString("Lat",String.valueOf(model.getLat()));
+                            extras.putString("Image",model.getImage());
+                            extras.putString("Name",model.getName());
+                            in.putExtras(extras);
+                            startActivity(in);
+
+
+                           // Toast.makeText(v.getContext(), "Lang"+model.getLang(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     }
+
                 };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+
     }
+
 
     public static class HomePageViewHolder extends RecyclerView.ViewHolder{
         View mView;
