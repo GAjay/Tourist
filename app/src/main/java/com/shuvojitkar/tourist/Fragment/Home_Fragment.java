@@ -31,6 +31,7 @@ import org.w3c.dom.Text;
 public class Home_Fragment extends Fragment {
     View v;
     private RecyclerView mRecyclerView;
+
     private ProgressDialog mPd;
     private DatabaseReference mUserDatabase;
     @Override
@@ -54,6 +55,8 @@ public class Home_Fragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        mPd.show();
+        mPd.setCancelable(false);
         FirebaseRecyclerAdapter<Home_frag_Model,HomePageViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Home_frag_Model, HomePageViewHolder>(
                         Home_frag_Model.class,
@@ -65,27 +68,35 @@ public class Home_Fragment extends Fragment {
                     protected void populateViewHolder(HomePageViewHolder viewHolder, final Home_frag_Model model, int position) {
                         viewHolder.setImage(model.getImage());
                         viewHolder.setName(model.getName());
-                     //   Toast.makeText(v.getContext(), model.getName(), Toast.LENGTH_SHORT).show();
+                        //   Toast.makeText(v.getContext(), model.getName(), Toast.LENGTH_SHORT).show();
 
-                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent in = new Intent(v.getContext(),DetailActivity.class);
-                            Bundle b = new Bundle();
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent in = new Intent(v.getContext(),DetailActivity.class);
+                                Bundle b = new Bundle();
 
-                            Bundle extras = new Bundle();
-                            extras.putString("Lang",String.valueOf(model.getLang()));
-                            extras.putString("Lat",String.valueOf(model.getLat()));
-                            extras.putString("Image",model.getImage());
-                            extras.putString("Name",model.getName());
-                            in.putExtras(extras);
-                            startActivity(in);
+                                Bundle extras = new Bundle();
+                                extras.putString("Lang",String.valueOf(model.getLang()));
+                                extras.putString("Lat",String.valueOf(model.getLat()));
+                                extras.putString("Image",model.getImage());
+                                extras.putString("Name",model.getName());
+                                extras.putString("Description",model.getDescription());
+                                in.putExtras(extras);
+                                startActivity(in);
 
 
-                           // Toast.makeText(v.getContext(), "Lang"+model.getLang(), Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(v.getContext(), "Lang"+model.getLang(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onDataChanged() {
+                        if (mPd != null && mPd.isShowing()) {
+                           mPd.dismiss();
                         }
-                    });
-
                     }
 
                 };
@@ -104,10 +115,10 @@ public class Home_Fragment extends Fragment {
 
         void setImage(String s){
             ImageView img = (ImageView) mView.findViewById(R.id.home_rec_imageView);
-               Picasso.with(mView.getContext())
-                        .load(s)
+            Picasso.with(mView.getContext())
+                    .load(s)
 
-                        .into(img);
+                    .into(img);
 
         }
 

@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         if(menuitem==R.id.menu_home){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=1)
-
                 LoadHomeFragment();
         }
         else if(menuitem==R.id.menu_profile){
