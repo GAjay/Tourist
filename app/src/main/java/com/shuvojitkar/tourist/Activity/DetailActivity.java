@@ -205,6 +205,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         googlePlacesUrl.append("&key=" + "AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
         Log.d("getUrl", googlePlacesUrl.toString());
         return (googlePlacesUrl.toString());
+
+
     }
 
 
