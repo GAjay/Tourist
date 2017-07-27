@@ -7,17 +7,27 @@ package com.shuvojitkar.tourist.Model;
 public class Home_frag_Model {
     private String image;
     private String name;
+    private String description;
     private Double lang;
     private Double lat;
 
-    public Home_frag_Model(String image, String name,Double lang,Double lat) {
+    public Home_frag_Model(String image, String name,Double lang,Double lat,String desc) {
         this.image = image;
         this.name = name;
         this.lang=lang;
         this.lat= lat;
+        this.description = desc;
     }
 
     public Home_frag_Model() {
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImage() {
