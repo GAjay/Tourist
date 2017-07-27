@@ -209,6 +209,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
+                
+                //vvv
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
