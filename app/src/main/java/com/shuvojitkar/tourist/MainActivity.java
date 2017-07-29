@@ -22,10 +22,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.shuvojitkar.tourist.Fragment.Guide_List_Fragment;
+import com.shuvojitkar.tourist.Activity.LoginActivity;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
 import com.shuvojitkar.tourist.Fragment.Profile_fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
+import com.shuvojitkar.tourist.Fragment.TouristGuide_list_fragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout mDrawerLayout;
@@ -138,9 +139,16 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
         }
         else if(menuitem==R.id.menu_profile){
-            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
-            if(FragIndex!=3)
-                LoadProfileFragment();
+
+            if(FragIndex!=3){
+                if (ChecktheLoginState()==true){
+                    LoadProfileFragment();
+                }else {
+                    Toast.makeText(this, "You are not Sign in", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
         }
 
         else if(menuitem==R.id.menu_guide){
@@ -203,6 +211,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
+        Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
         getSupportActionBar().setTitle("Profile");
         Runnable runnable = new Runnable() {
             @Override
@@ -224,13 +233,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        getSupportActionBar().setTitle("Admin");
+        getSupportActionBar().setTitle("Tourist Guide List");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.homeframe,new Guide_List_Fragment(),"Admin")
+                        .replace(R.id.homeframe,new TouristGuide_list_fragment(),"Admin")
                         .commit();
             }
         };
@@ -253,7 +262,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     }
 
 
-
+    //==============Toolbar menu item Click Listener===============
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()==R.id.main_logout_btn){
@@ -268,13 +277,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
                 }
         }
-        else if(item.getItemId()==R.id.main_setting_btn){
-
+        else if(item.getItemId()==R.id.main_login_btn){
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
-
+    //================Check the Login state=======================
     public boolean ChecktheLoginState(){
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
         if (currentUser == null) {
