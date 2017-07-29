@@ -6,8 +6,13 @@
         android:id="@+id/menu_home"/>
 
     <item
+        android:id="@+id/menu_create_account"
+        android:title="Create Account" />
+
+    <item
         android:id="@+id/menu_profile"
         android:title="Profile" />
+
     <item android:title="Tourist Guide "
         android:id="@+id/menu_guide"/>
 

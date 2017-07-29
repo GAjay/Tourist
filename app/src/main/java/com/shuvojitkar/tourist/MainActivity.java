@@ -1,5 +1,7 @@
 package com.shuvojitkar.tourist;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -9,15 +11,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.shuvojitkar.tourist.Fragment.Guide_List_Fragment;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
+import com.shuvojitkar.tourist.Fragment.Profile_fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
@@ -25,6 +32,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     private NavigationView mNavigationView;
     private FrameLayout mFrameLayout;
     private FloatingActionButton mFav;
+    private FirebaseAuth mFirebaseAuth;
+    private static boolean LoginState;
     private static Toolbar mToolbar;
     private static Handler mHandler;
     private static int FragIndex;
@@ -44,10 +53,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
     }
 
+
+
     private void init() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.home_dl);
         mNavigationView  = (NavigationView) findViewById(R.id.home_nav);
         mNavigationView.setNavigationItemSelectedListener(this);
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         mFrameLayout = (FrameLayout) findViewById(R.id.homeframe);
         mHandler = new Handler();
@@ -65,6 +77,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
     }
 
 
+
+    //==================Check the networkState=================
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
@@ -81,6 +95,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         return haveConnectedWifi || haveConnectedMobile;
     }
 
+
+
+
+    //=================Navigation Drawer Click Listener===============
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -91,14 +109,43 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(FragIndex!=1)
                 LoadHomeFragment();
         }
-        else if(menuitem==R.id.menu_profile){
+        else if(menuitem==R.id.menu_create_account){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=2)
-                Load_Register();
+                if (ChecktheLoginState()==true){
+                    AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+                                alertDialog.setTitle("Attention");
+                                alertDialog.setMessage("You are currently logd in.");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Sign Out",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                FirebaseAuth.getInstance().signOut();
+                                                Load_Register();
+                                                dialog.dismiss();
+                                            }
+                                        });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                                alertDialog.setCanceledOnTouchOutside(false);
+                                alertDialog.show();
+                }else {
+                    Load_Register();
+                }
+
         }
-        else if(menuitem==R.id.menu_guide){
+        else if(menuitem==R.id.menu_profile){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=3)
+                LoadProfileFragment();
+        }
+
+        else if(menuitem==R.id.menu_guide){
+            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+            if(FragIndex!=4)
                 Load_Guide_list();
         }
         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -107,6 +154,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
 
+
+        //================Fragment List===============
     public void LoadHomeFragment(){
         FragIndex=1;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -128,7 +177,6 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
 
     }
-
     public void Load_Register(){
         FragIndex=2;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -150,9 +198,29 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
 
     }
-
-    public void Load_Guide_list(){
+    public void LoadProfileFragment(){
         FragIndex=3;
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        getSupportActionBar().setTitle("Profile");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeframe,new Profile_fragment(),"Profile Fragment")
+                        .commit();
+            }
+        };
+
+        if(runnable!=null){
+            mHandler.post(runnable);
+        }
+
+    }
+    public void Load_Guide_list(){
+        FragIndex=4;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -171,5 +239,63 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             mHandler.post(runnable);
         }
 
+    }
+
+
+
+
+    //------------Toolbar menu------------
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==R.id.main_logout_btn){
+
+                if (ChecktheLoginState() ==true){
+                    FirebaseAuth.getInstance().signOut();
+                    if (FragIndex==3){
+                        LoadHomeFragment();
+                    }
+                }else {
+                    Toast.makeText(this, "You are not logd in", Toast.LENGTH_SHORT).show();
+
+                }
+        }
+        else if(item.getItemId()==R.id.main_setting_btn){
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public boolean ChecktheLoginState(){
+        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+        if (currentUser == null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    //Check the user is sign in or not
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        //otherwise it return null method
+        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            LoginState =false;
+        }else {
+            LoginState = true;
+        }
     }
 }

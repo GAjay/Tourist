@@ -108,7 +108,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 if(zoom_amount<160){
-                    zoom_amount+=5;
+                    zoom_amount+=2;
                     set_map_zoom(zoom_amount);
                 }else{
                     showToast("At Max zoom leve",Toast.LENGTH_SHORT);
@@ -119,8 +119,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         m_zoomout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(zoom_amount>5){
-                    zoom_amount-=5;
+                if(zoom_amount>2){
+                    zoom_amount-=2;
                     set_map_zoom(zoom_amount);
                 }else{
                     showToast("At Min zoom leve",Toast.LENGTH_SHORT);
@@ -155,7 +155,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(latLng);
             circleOptions.radius(300);
-            circleOptions.strokeColor(Color.BLACK);
+            //circleOptions.strokeColor(Color.BLACK);
             circleOptions.fillColor(0x30ff0000);
             circleOptions.strokeWidth(10);
             mMap.addCircle(circleOptions);
@@ -209,8 +209,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-                
-                //vvv
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
