@@ -53,8 +53,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private LatLng latLng;
     private TextView desc_textview;
 
-    private Button m_zoomin, m_zoomout,findHospital,findResturent;
-    private int zoom_amount = 20;
+    private Button m_zoomin, m_zoomout, findHospital, findResturent;
+    private int zoom_amount = 15;
 
     private int PROXIMITY_RADIUS = 10000;
 
@@ -88,7 +88,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         longitude = Double.parseDouble(extras.getString("Lang"));
         latitude = Double.parseDouble(extras.getString("Lat"));
         name = extras.getString("Name");
-        image =extras.getString("Image");
+        image = extras.getString("Image");
         descriptipn = extras.getString("Description");
 
         mPlaceName.setText(name);
@@ -99,7 +99,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private void init() {
         mPlaceImage = (ImageView) findViewById(R.id.detail_imageView);
         mPlaceName = (TextView) findViewById(R.id.detail_place_name);
-        desc_textview = (TextView)findViewById(R.id.descrition_textview);
+        desc_textview = (TextView) findViewById(R.id.descrition_textview);
         m_zoomin = (Button) findViewById(R.id.map_zoomin);
         m_zoomout = (Button) findViewById(R.id.map_zoomout);
         findHospital = (Button) findViewById(R.id.hsp_button);
@@ -107,11 +107,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         m_zoomin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(zoom_amount<160){
-                    zoom_amount+=5;
+                if (zoom_amount < 160) {
+                    zoom_amount += 5;
                     set_map_zoom(zoom_amount);
-                }else{
-                    showToast("At Max zoom leve",Toast.LENGTH_SHORT);
+                } else {
+                    showToast("At Max zoom leve", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -119,11 +119,11 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         m_zoomout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(zoom_amount>5){
-                    zoom_amount-=5;
+                if (zoom_amount > 5) {
+                    zoom_amount -= 5;
                     set_map_zoom(zoom_amount);
-                }else{
-                    showToast("At Min zoom leve",Toast.LENGTH_SHORT);
+                } else {
+                    showToast("At Min zoom leve", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -144,8 +144,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if(googleMap!= null){
-            latLng = new LatLng(longitude,latitude);
+        if (googleMap != null) {
+            latLng = new LatLng(longitude, latitude);
             mMap = googleMap;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
@@ -166,23 +166,22 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
             mMap.getUiSettings().setCompassEnabled(true);
 
-        }else{
-            showToast("Map is not ready yet" , Toast.LENGTH_SHORT);
+        } else {
+            showToast("Map is not ready yet", Toast.LENGTH_SHORT);
         }
     }
 
 
-    private void set_map_zoom(int zoom_amount){
+    private void set_map_zoom(int zoom_amount) {
 
-        if(mMap!=null){
+        if (mMap != null) {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
-        }
-        else
-            showToast("Map is not ready yet" , Toast.LENGTH_SHORT);
+        } else
+            showToast("Map is not ready yet", Toast.LENGTH_SHORT);
     }
 
-    private void showToast(String massage,int duration){
-        Toast.makeText(getBaseContext(),massage,duration).show();
+    private void showToast(String massage, int duration) {
+        Toast.makeText(getBaseContext(), massage, duration).show();
     }
 
 
@@ -195,16 +194,14 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleApiClient.connect();
     }
 
-
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&type=" + nearbyPlace);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + "AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
-        Log.d("getUrl", googlePlacesUrl.toString());
-        return (googlePlacesUrl.toString());
+
+
+        // 24.8955847,91.864673
+        double latitude1 = 24.8955847, longitude1 = 91.864673;
+
+
+        return "https://maps.googleapis.com/maps/api/place/radarsearch/json?location=" + latitude1 + "," + longitude1 + "&radius=" + PROXIMITY_RADIUS + "&type=" + nearbyPlace + "&key=AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8";
 
 
     }
