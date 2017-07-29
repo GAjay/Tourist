@@ -198,6 +198,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
 
         // 24.8955847,91.864673
+
+
         double latitude1 = 24.8955847, longitude1 = 91.864673;
 
 
