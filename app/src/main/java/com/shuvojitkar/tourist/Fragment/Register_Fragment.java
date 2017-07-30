@@ -89,7 +89,6 @@ public class Register_Fragment extends Fragment {
                     mProgressDialog.setMessage("Please wait while we create your account !");
                     mProgressDialog.setCanceledOnTouchOutside(false);
                     mProgressDialog.show();
-
                         register_user(display_name,email,password,AccountType);
 
 

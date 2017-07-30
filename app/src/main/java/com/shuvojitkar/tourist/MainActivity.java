@@ -23,8 +23,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shuvojitkar.tourist.Activity.LoginActivity;
+import com.shuvojitkar.tourist.Activity.ProfileActivity;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
-import com.shuvojitkar.tourist.Fragment.Profile_fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
 import com.shuvojitkar.tourist.Fragment.TouristGuide_list_fragment;
 
@@ -142,7 +142,8 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
             if(FragIndex!=3){
                 if (ChecktheLoginState()==true){
-                    LoadProfileFragment();
+                    //LoadProfileFragment();
+                    startActivity(new Intent(MainActivity.this, ProfileActivity.class));
                 }else {
                     Toast.makeText(this, "You are not Sign in", Toast.LENGTH_SHORT).show();
                 }
@@ -206,7 +207,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
 
     }
-    public void LoadProfileFragment(){
+/*    public void LoadProfileFragment(){
         FragIndex=3;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             mHandler.post(runnable);
         }
 
-    }
+    }*/
     public void Load_Guide_list(){
         FragIndex=4;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
