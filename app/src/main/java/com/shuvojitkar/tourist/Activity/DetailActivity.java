@@ -2,14 +2,21 @@ package com.shuvojitkar.tourist.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +48,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
     public String name;
     public String image;
     public String lan;
@@ -131,12 +139,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         findHospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = getUrl(latitude, longitude, "hospital");
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = getBaseContext();
-                new GetNearbyPlacesData().execute(DataTransfer);
+                execute("hospital");
             }
         });
 
@@ -208,8 +211,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-                
-                //vvv
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -229,5 +230,84 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+
+    private void execute(String type) {
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        } else {
+
+            if (haveNetworkConnection() == true) {
+                String url = getUrl(latitude, longitude, type);
+                Object[] DataTransfer = new Object[3];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = getBaseContext();
+                new GetNearbyPlacesData().execute(DataTransfer);
+            }else{
+                Snackbar.make(findViewById(R.id.home_nav),"No Internet Connection",Snackbar.LENGTH_LONG)
+                        .show();
+            }
+
+
+        }
+
+
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == 0) {
+            String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if (provider != null) {
+
+                //Start searching for location and update the location text when update available.
+// Do whatever you want
+                showToast("Gps enabled", Toast.LENGTH_LONG);
+            } else {
+                //Users did not switch on the GPS
+            }
+        }
+    }
+
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 1);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 }

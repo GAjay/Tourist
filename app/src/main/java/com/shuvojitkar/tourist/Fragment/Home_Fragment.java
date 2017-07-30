@@ -1,12 +1,18 @@
 package com.shuvojitkar.tourist.Fragment;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.shuvojitkar.tourist.Activity.DetailActivity;
 import com.shuvojitkar.tourist.GetFirebaseRef;
@@ -34,9 +41,10 @@ public class Home_Fragment extends Fragment {
 
     private ProgressDialog mPd;
     private DatabaseReference mUserDatabase;
+
     @Override
-    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
-        v= inflater.inflate(R.layout.home_fragment,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.home_fragment, container, false);
         init(v);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
         //Toast.makeText(v.getContext(), "model.getName()", Toast.LENGTH_SHORT).show();
@@ -44,7 +52,7 @@ public class Home_Fragment extends Fragment {
     }
 
     private void init(final View v) {
-        mUserDatabase  = GetFirebaseRef.GetDbIns().getReference().child("home_page_post");
+        mUserDatabase = GetFirebaseRef.GetDbIns().getReference().child("home_page_post");
         mRecyclerView = (RecyclerView) v.findViewById(R.id.home_recView);
         mRecyclerView.setHasFixedSize(true);
         mPd = new ProgressDialog(v.getContext());
@@ -57,7 +65,7 @@ public class Home_Fragment extends Fragment {
         super.onStart();
         mPd.show();
         mPd.setCancelable(false);
-        FirebaseRecyclerAdapter<Home_frag_Model,HomePageViewHolder> firebaseRecyclerAdapter =
+        FirebaseRecyclerAdapter<Home_frag_Model, HomePageViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Home_frag_Model, HomePageViewHolder>(
                         Home_frag_Model.class,
                         R.layout.home_rec_layout,
@@ -73,20 +81,29 @@ public class Home_Fragment extends Fragment {
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent in = new Intent(v.getContext(),DetailActivity.class);
-                                Bundle b = new Bundle();
-
-                                Bundle extras = new Bundle();
-                                extras.putString("Lang",String.valueOf(model.getLang()));
-                                extras.putString("Lat",String.valueOf(model.getLat()));
-                                extras.putString("Image",model.getImage());
-                                extras.putString("Name",model.getName());
-                                extras.putString("Description",model.getDescription());
-                                in.putExtras(extras);
-                                startActivity(in);
 
 
-                                // Toast.makeText(v.getContext(), "Lang"+model.getLang(), Toast.LENGTH_SHORT).show();
+                                //Check For Permission
+                                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                                        == PackageManager.PERMISSION_GRANTED) {
+
+                                    Intent in = new Intent(v.getContext(), DetailActivity.class);
+                                    Bundle b = new Bundle();
+
+                                    Bundle extras = new Bundle();
+                                    extras.putString("Lang", String.valueOf(model.getLang()));
+                                    extras.putString("Lat", String.valueOf(model.getLat()));
+                                    extras.putString("Image", model.getImage());
+                                    extras.putString("Name", model.getName());
+                                    extras.putString("Description", model.getDescription());
+                                    in.putExtras(extras);
+                                    startActivity(in);
+
+                                } else {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                                }
+
+
                             }
                         });
 
@@ -95,7 +112,7 @@ public class Home_Fragment extends Fragment {
                     @Override
                     public void onDataChanged() {
                         if (mPd != null && mPd.isShowing()) {
-                           mPd.dismiss();
+                            mPd.dismiss();
                         }
                     }
 
@@ -105,15 +122,16 @@ public class Home_Fragment extends Fragment {
     }
 
 
-    public static class HomePageViewHolder extends RecyclerView.ViewHolder{
+    public static class HomePageViewHolder extends RecyclerView.ViewHolder {
         View mView;
+
         public HomePageViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
         }
 
 
-        void setImage(String s){
+        void setImage(String s) {
             ImageView img = (ImageView) mView.findViewById(R.id.home_rec_imageView);
             Picasso.with(mView.getContext())
                     .load(s)
@@ -122,7 +140,7 @@ public class Home_Fragment extends Fragment {
 
         }
 
-        void setName(String s){
+        void setName(String s) {
             TextView placeName = (TextView) itemView.findViewById(R.id.home_rec_place_name);
             placeName.setText(s);
         }
