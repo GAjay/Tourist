@@ -31,12 +31,14 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     private PlaceDetails placeDetails;
     private ArrayList<PlaceDetails> placeDetailsArrayList;
     private Context context;
+    private OnNearByFound onNearByFound;
 
     @Override
     protected String doInBackground(Object... objects){
         mMap = (GoogleMap)objects[0];
         url = (String)objects[1];
         context = (Context) objects[2];
+        onNearByFound= (OnNearByFound) objects[3];
 
         DownloadNearbyPlaceUrl downloadURL = new DownloadNearbyPlaceUrl();
         try {
@@ -62,11 +64,14 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     {
 
 
+
         if(placeDetailsArrayList.size()==0){
             Toast.makeText(context,"Sorry we find nothing for you",Toast.LENGTH_SHORT).show();
             return;
 
         }
+
+        onNearByFound.placeFound(placeDetailsArrayList);
 
         for(int i = 0; i < placeDetailsArrayList.size(); i++)
         {

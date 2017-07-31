@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.shuvojitkar.tourist.DialogBoxes.NearByPlaceDialog;
 import com.shuvojitkar.tourist.Map_Helpers.GetNearbyPlacesData;
 import com.shuvojitkar.tourist.Map_Helpers.OnNearByFound;
 import com.shuvojitkar.tourist.Map_Helpers.PlaceDetails;
@@ -96,6 +97,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private ArrayList<PlaceDetails> nearbyPlacesList;
     private int loop;
+
+    private NearByPlaceDialog nearByPlaceDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +159,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 if(zoom_amount<160){
                     zoom_amount+=2;
-
                     set_map_zoom(zoom_amount);
                 } else {
                     showToast("At Max zoom leve", Toast.LENGTH_SHORT);
@@ -170,6 +172,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 if(zoom_amount>2){
                     zoom_amount-=2;
+                   // nearByPlaceDialog.dismiss();
 
                     set_map_zoom(zoom_amount);
                 } else {
@@ -365,7 +368,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList2) {
-
+    public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList) {
+        nearByPlaceDialog = new NearByPlaceDialog();
+        nearByPlaceDialog.showDialog(DetailActivity.this,"",nearbyPlacesList);
     }
 }
