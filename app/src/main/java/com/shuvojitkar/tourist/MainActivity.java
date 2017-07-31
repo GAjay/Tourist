@@ -27,6 +27,7 @@ import com.shuvojitkar.tourist.Activity.ProfileActivity;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
 import com.shuvojitkar.tourist.Fragment.TouristGuide_list_fragment;
+import com.shuvojitkar.tourist.Fragment.Travler_list_fragment;
 
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout mDrawerLayout;
@@ -157,6 +158,12 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(FragIndex!=4)
                 Load_Guide_list();
         }
+        else if(menuitem==R.id.menu_tourist){
+            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+            if(FragIndex!=5)
+                Load_Tourist_list();
+        }
+
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -241,6 +248,27 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.homeframe,new TouristGuide_list_fragment(),"Admin")
+                        .commit();
+            }
+        };
+
+        if(runnable!=null){
+            mHandler.post(runnable);
+        }
+
+    }
+    public void Load_Tourist_list(){
+        FragIndex=5;
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        getSupportActionBar().setTitle("Traveler List");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeframe,new Travler_list_fragment(),"Admin")
                         .commit();
             }
         };
