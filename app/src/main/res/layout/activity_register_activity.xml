@@ -77,6 +77,7 @@
 
             <Spinner
                 android:id="@+id/reg_spinner"
+                android:spinnerMode="dialog"
                 android:entries="@array/account_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></Spinner>
