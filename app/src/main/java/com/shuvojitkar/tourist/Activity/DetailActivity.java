@@ -84,7 +84,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private Button m_zoomin, m_zoomout, findHospital, findResturent;
     private int zoom_amount = 15;
 
-    private int PROXIMITY_RADIUS = 300;
+    private int PROXIMITY_RADIUS = 1300;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -223,14 +223,26 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
 
+
+        showToast(latitude+" "+longitude,1);
+
         // 24.8955847,91.864673
 
 
-        double latitude1 = 24.8955847, longitude1 = 91.864673;
+        double latitude1 = 24.8955847, longitude1 =91.864673;
 
 
-        return "https://maps.googleapis.com/maps/api/place/radarsearch/json?location=" + latitude1 + "," + longitude1 + "&radius=" + PROXIMITY_RADIUS + "&type=" + nearbyPlace + "&key=AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8";
 
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location="+longitude+","+latitude);
+        googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
+        googlePlaceUrl.append("&type="+"hospital");
+        googlePlaceUrl.append("&sensor=true");
+        googlePlaceUrl.append("&key="+"AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
+
+        Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
+
+        return googlePlaceUrl.toString();
 
     }
 
@@ -276,7 +288,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 Snackbar.make(findViewById(R.id.home_nav), "No Internet Connection", Snackbar.LENGTH_LONG)
                         .show();
             }
-
 
         }
 
@@ -337,104 +348,5 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList2) {
 
-
-        if (nearbyPlacesList != null) {
-            this.nearbyPlacesList = nearbyPlacesList2;
-            for (loop = 0; loop < nearbyPlacesList.size(); loop++) {
-
-
-                MarkerOptions markerOptions = new MarkerOptions();
-                PlaceDetails googlePlace = nearbyPlacesList.get(loop);
-
-
-                new AsyncTask<PlaceDetails, Void, String>() {
-
-                    @Override
-                    protected String doInBackground(PlaceDetails... params) {
-
-                        String data = "";
-                        InputStream iStream = null;
-                        HttpURLConnection urlConnection = null;
-
-                        PlaceDetails placeDetails = (PlaceDetails) params[0];
-
-
-                        String lat= placeDetails.getLat();
-                        String lan = placeDetails.getLan();
-
-                        try {
-                            URL url = new URL("http://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lan+"&sensor=true");
-
-                            urlConnection = (HttpURLConnection) url.openConnection();
-
-                            urlConnection.connect();
-
-                            // Reading data from url
-                            iStream = urlConnection.getInputStream();
-
-                            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-
-                            StringBuffer sb = new StringBuffer();
-
-                            String line = "";
-                            while ((line = br.readLine()) != null) {
-                                sb.append(line);
-                            }
-
-                            data = sb.toString();
-                            Log.d("downloadUrl", data.toString());
-                            br.close();
-
-                        } catch (Exception e) {
-                            Log.d("Exception", e.toString());
-                        } finally {
-                            try {
-                                iStream.close();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            urlConnection.disconnect();
-                        }
-
-
-                        return data;
-                    }
-
-                    @Override
-                    protected void onPostExecute(String result) {
-
-                        JSONObject object1 = null;
-                        try {
-                            JSONObject object = new JSONObject(result);
-
-                            JSONArray array1 = (JSONArray) object.get("results");
-
-                            object1 = array1.getJSONObject(0);
-
-                            JSONArray array2 = (JSONArray) object1.get("address_components");
-                            JSONObject name1 = (JSONObject) array2.get(0);
-                            String long_name = String.valueOf(name1.get("long_name"));
-                            Toast.makeText(getBaseContext(), long_name, Toast.LENGTH_LONG).show();
-
-
-
-                        } catch (JSONException e) {
-                            Toast.makeText(getBaseContext(), String.valueOf(e), Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }.execute(googlePlace);
-
-                double lat = Double.parseDouble(googlePlace.getLat());
-                double lng = Double.parseDouble(googlePlace.getLan());
-
-                LatLng latLng = new LatLng(lat, lng);
-                markerOptions.position(latLng);
-                mMap.addMarker(markerOptions);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-            }
-        }
     }
 }

@@ -27,41 +27,53 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     private String googlePlacesData;
     private GoogleMap mMap;
-    private String url;
-    private Context context;
-    private OnNearByFound onNearByFound;
+    String url;
 
     @Override
-    protected String doInBackground(Object... params) {
+    protected String doInBackground(Object... objects){
+        mMap = (GoogleMap)objects[0];
+        url = (String)objects[1];
+
+        DownloadNearbyPlaceUrl downloadURL = new DownloadNearbyPlaceUrl();
         try {
-            Log.d("GetNearbyPlacesData", "doInBackground entered");
-            mMap = (GoogleMap) params[0];
-            url = (String) params[1];
-            context = (Context) params[2];
-            onNearByFound = (OnNearByFound)params[3];
-            DownloadNearbyPlaceUrl downloadUrl = new DownloadNearbyPlaceUrl();
-            googlePlacesData = downloadUrl.readUrl(url);
-            Log.d("GooglePlacesReadTask", "doInBackground Exit");
-        } catch (Exception e) {
-            Log.d("GooglePlacesReadTask", e.toString());
+            googlePlacesData = downloadURL.readUrl(url);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return googlePlacesData;
     }
 
     @Override
-    protected void onPostExecute(String result) {
-        //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-        ArrayList<PlaceDetails> nearbyPlacesList = null;
-        NearByPlaceDataParser dataParser = new NearByPlaceDataParser();
-        nearbyPlacesList = dataParser.parse(result);
-        ShowNearbyPlaces(nearbyPlacesList);
+    protected void onPostExecute(String s){
+
+        List<HashMap<String, String>> nearbyPlaceList;
+        NearByPlaceDataParser parser = new NearByPlaceDataParser();
+        nearbyPlaceList = parser.parse(s);
+        Log.d("nearbyplacesdata","called parse method");
+        showNearbyPlaces(nearbyPlaceList);
     }
 
-    private void ShowNearbyPlaces(ArrayList<PlaceDetails> nearbyPlacesList) {
+    private void showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList)
+    {
+        for(int i = 0; i < nearbyPlaceList.size(); i++)
+        {
+            MarkerOptions markerOptions = new MarkerOptions();
+            HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
 
-        onNearByFound.placeFound(nearbyPlacesList);
+            String placeName = googlePlace.get("place_name");
+            String vicinity = googlePlace.get("vicinity");
+            double lat = Double.parseDouble( googlePlace.get("lat"));
+            double lng = Double.parseDouble( googlePlace.get("lng"));
 
+            LatLng latLng = new LatLng( lat, lng);
+            markerOptions.position(latLng);
+            markerOptions.title(placeName + " : "+ vicinity);
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+            mMap.addMarker(markerOptions);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+        }
     }
-
-
 }
