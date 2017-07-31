@@ -2,14 +2,24 @@ package com.shuvojitkar.tourist.Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,13 +44,31 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.shuvojitkar.tourist.Map_Helpers.GetNearbyPlacesData;
+import com.shuvojitkar.tourist.Map_Helpers.OnNearByFound;
+import com.shuvojitkar.tourist.Map_Helpers.PlaceDetails;
 import com.shuvojitkar.tourist.R;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener, OnNearByFound {
+
     public String name;
     public String image;
     public String lan;
@@ -53,10 +81,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private LatLng latLng;
     private TextView desc_textview;
 
-    private Button m_zoomin, m_zoomout,findHospital,findResturent;
-    private int zoom_amount = 20;
+    private Button m_zoomin, m_zoomout, findHospital, findResturent;
+    private int zoom_amount = 15;
 
-    private int PROXIMITY_RADIUS = 10000;
+    private int PROXIMITY_RADIUS = 1300;
 
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -64,6 +92,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private LocationRequest mLocationRequest;
 
     private Double longitude, latitude;
+
+    private ArrayList<PlaceDetails> nearbyPlacesList;
+    private int loop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +119,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         longitude = Double.parseDouble(extras.getString("Lang"));
         latitude = Double.parseDouble(extras.getString("Lat"));
         name = extras.getString("Name");
-        image =extras.getString("Image");
+        image = extras.getString("Image");
         descriptipn = extras.getString("Description");
 
         mPlaceName.setText(name);
@@ -99,7 +130,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private void init() {
         mPlaceImage = (ImageView) findViewById(R.id.detail_imageView);
         mPlaceName = (TextView) findViewById(R.id.detail_place_name);
-        desc_textview = (TextView)findViewById(R.id.descrition_textview);
+        desc_textview = (TextView) findViewById(R.id.descrition_textview);
         m_zoomin = (Button) findViewById(R.id.map_zoomin);
         m_zoomout = (Button) findViewById(R.id.map_zoomout);
         findHospital = (Button) findViewById(R.id.hsp_button);
@@ -107,11 +138,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         m_zoomin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(zoom_amount<160){
                     zoom_amount+=2;
+
                     set_map_zoom(zoom_amount);
-                }else{
-                    showToast("At Max zoom leve",Toast.LENGTH_SHORT);
+                } else {
+                    showToast("At Max zoom leve", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -119,11 +152,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         m_zoomout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(zoom_amount>2){
                     zoom_amount-=2;
+
                     set_map_zoom(zoom_amount);
-                }else{
-                    showToast("At Min zoom leve",Toast.LENGTH_SHORT);
+                } else {
+                    showToast("At Min zoom leve", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -131,12 +166,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         findHospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = getUrl(latitude, longitude, "hospital");
-                Object[] DataTransfer = new Object[3];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = getBaseContext();
-                new GetNearbyPlacesData().execute(DataTransfer);
+                execute("hospital");
             }
         });
 
@@ -144,8 +174,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if(googleMap!= null){
-            latLng = new LatLng(longitude,latitude);
+        if (googleMap != null) {
+            latLng = new LatLng(longitude, latitude);
             mMap = googleMap;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
@@ -166,23 +196,22 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
             mMap.getUiSettings().setCompassEnabled(true);
 
-        }else{
-            showToast("Map is not ready yet" , Toast.LENGTH_SHORT);
+        } else {
+            showToast("Map is not ready yet", Toast.LENGTH_SHORT);
         }
     }
 
 
-    private void set_map_zoom(int zoom_amount){
+    private void set_map_zoom(int zoom_amount) {
 
-        if(mMap!=null){
+        if (mMap != null) {
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
-        }
-        else
-            showToast("Map is not ready yet" , Toast.LENGTH_SHORT);
+        } else
+            showToast("Map is not ready yet", Toast.LENGTH_SHORT);
     }
 
-    private void showToast(String massage,int duration){
-        Toast.makeText(getBaseContext(),massage,duration).show();
+    private void showToast(String massage, int duration) {
+        Toast.makeText(getBaseContext(), massage, duration).show();
     }
 
 
@@ -195,17 +224,29 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         mGoogleApiClient.connect();
     }
 
-
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&type=" + nearbyPlace);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + "AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
-        Log.d("getUrl", googlePlacesUrl.toString());
-        return (googlePlacesUrl.toString());
 
+
+
+        showToast(latitude+" "+longitude,1);
+
+        // 24.8955847,91.864673
+
+
+       // double latitude1 = 24.8955847, longitude1 =91.864673;
+
+
+
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location="+longitude+","+latitude);
+        googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
+        googlePlaceUrl.append("&type="+"hospital");
+        googlePlaceUrl.append("&sensor=true");
+        googlePlaceUrl.append("&key="+"AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
+
+        Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
+
+        return googlePlaceUrl.toString();
 
     }
 
@@ -227,6 +268,89 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onLocationChanged(Location location) {
+
+    }
+
+
+    private void execute(String type) {
+
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        } else {
+
+            if (haveNetworkConnection() == true) {
+                String url = getUrl(latitude, longitude, type);
+                Object[] DataTransfer = new Object[4];
+                DataTransfer[0] = mMap;
+                DataTransfer[1] = url;
+                DataTransfer[2] = getBaseContext();
+                DataTransfer[3] = this;
+                new GetNearbyPlacesData().execute(DataTransfer);
+            } else {
+                Snackbar.make(findViewById(R.id.home_nav), "No Internet Connection", Snackbar.LENGTH_LONG)
+                        .show();
+            }
+
+        }
+
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == 0) {
+            String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if (provider != null) {
+
+                //Start searching for location and update the location text when update available.
+// Do whatever you want
+                showToast("Gps enabled", Toast.LENGTH_LONG);
+            } else {
+                //Users did not switch on the GPS
+            }
+        }
+    }
+
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 1);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
+
+    @Override
+    public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList2) {
 
     }
 }
