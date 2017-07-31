@@ -27,12 +27,16 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     private String googlePlacesData;
     private GoogleMap mMap;
-    String url;
+    private String url;
+    private PlaceDetails placeDetails;
+    private ArrayList<PlaceDetails> placeDetailsArrayList;
+    private Context context;
 
     @Override
     protected String doInBackground(Object... objects){
         mMap = (GoogleMap)objects[0];
         url = (String)objects[1];
+        context = (Context) objects[2];
 
         DownloadNearbyPlaceUrl downloadURL = new DownloadNearbyPlaceUrl();
         try {
@@ -47,28 +51,37 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
     @Override
     protected void onPostExecute(String s){
 
-        List<HashMap<String, String>> nearbyPlaceList;
+
         NearByPlaceDataParser parser = new NearByPlaceDataParser();
-        nearbyPlaceList = parser.parse(s);
+        placeDetailsArrayList = parser.parse(s);
         Log.d("nearbyplacesdata","called parse method");
-        showNearbyPlaces(nearbyPlaceList);
+        showNearbyPlaces(placeDetailsArrayList);
     }
 
-    private void showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList)
+    private void showNearbyPlaces(ArrayList<PlaceDetails> placeDetailsArrayList)
     {
-        for(int i = 0; i < nearbyPlaceList.size(); i++)
+
+
+        if(placeDetailsArrayList.size()==0){
+            Toast.makeText(context,"Sorry we find nothing for you",Toast.LENGTH_SHORT).show();
+            return;
+
+        }
+
+        for(int i = 0; i < placeDetailsArrayList.size(); i++)
         {
             MarkerOptions markerOptions = new MarkerOptions();
-            HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
+            placeDetails = placeDetailsArrayList.get(i);
 
-            String placeName = googlePlace.get("place_name");
-            String vicinity = googlePlace.get("vicinity");
-            double lat = Double.parseDouble( googlePlace.get("lat"));
-            double lng = Double.parseDouble( googlePlace.get("lng"));
+            String placeName = placeDetails.getPlaceName();
+            String vicinity = placeDetails.getVicinity();
+            String ref = placeDetails.getReference();
+            double lat = placeDetails.getLat();
+            double lng = placeDetails.getLan();
 
             LatLng latLng = new LatLng( lat, lng);
             markerOptions.position(latLng);
-            markerOptions.title(placeName + " : "+ vicinity);
+            markerOptions.title(placeName + " : "+ ref);
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
             mMap.addMarker(markerOptions);

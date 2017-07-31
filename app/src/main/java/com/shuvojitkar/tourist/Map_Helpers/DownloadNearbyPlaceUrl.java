@@ -48,7 +48,6 @@ public class DownloadNearbyPlaceUrl {
             inputStream.close();
             urlConnection.disconnect();
         }
-        Log.d("DownloadURL","Returning data= "+data);
 
         return data;
     }
