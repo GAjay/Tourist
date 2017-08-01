@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.shuvojitkar.tourist.Activity.DetailActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -57,58 +58,70 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/map"
+                    class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
+                    android:layout_height="match_parent" />
 
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/map"
-                    android:orientation="horizontal"
                     android:layout_alignLeft="@+id/map"
                     android:layout_alignTop="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
 
-                    <Button
-                        android:text="Hospital"
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/hsp_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@drawable/doctor" />
 
-                    <Button
-                        android:text="Resturent"
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/res_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@drawable/chefe" />
 
-
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/police_button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:src="@drawable/police" />
 
 
                 </LinearLayout>
 
 
                 <LinearLayout
-                    android:layout_alignBaseline="@+id/map"
-                    android:layout_alignRight="@+id/map"
-                    android:layout_alignBottom="@+id/map"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/map"
+                    android:layout_alignBottom="@+id/map"
+                    android:layout_alignRight="@+id/map"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/map_zoomout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-"/>
+                        android:text="-" />
 
                     <Button
                         android:id="@+id/map_zoomin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+"/>
+                        android:text="+" />
                 </LinearLayout>
 
             </RelativeLayout>
