@@ -2,6 +2,7 @@ package com.shuvojitkar.tourist.Fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,32 +20,30 @@ import com.shuvojitkar.tourist.R;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by SHOBOJIT on 7/29/2017.
+ * Created by SHOBOJIT on 7/31/2017.
  */
 
-public class TouristGuide_list_fragment extends Fragment {
+public class Travler_list_fragment extends Fragment {
+        private static  View v;
+        private ProgressDialog mPd;
+        private DatabaseReference mTourist;
+    private RecyclerView mTouristList;
 
-    private RecyclerView mTouristGuideList;
 
-    private ProgressDialog mPd;
-    private DatabaseReference mTouristGuide;
-   View v;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.tourist_guide_fragment,container,false);
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.traveler_list_fragment,container,false);
         init(v);
-        mTouristGuideList.setLayoutManager(new LinearLayoutManager(v.getContext()));
-        return  v;
+        mTouristList.setLayoutManager(new LinearLayoutManager(v.getContext()));
+        return v;
     }
-
 
     private void init(View v) {
-        mTouristGuideList = (RecyclerView) v.findViewById(R.id.tourist_list);
-        mTouristGuideList.setHasFixedSize(true);
-        mTouristGuide = GetFirebaseRef.GetDbIns().getReference().child("touristGuide");
+        mTouristList = (RecyclerView) v.findViewById(R.id.traveler_list_rec);
+        mTouristList.setHasFixedSize(true);
+        mTourist = GetFirebaseRef.GetDbIns().getReference().child("tourist");
         mPd = new ProgressDialog(v.getContext());
     }
-
 
 
     @Override
@@ -52,18 +51,18 @@ public class TouristGuide_list_fragment extends Fragment {
         super.onStart();
         mPd.show();
         mPd.setCancelable(false);
-        FirebaseRecyclerAdapter<Person_list,TouristGuideViewHolder> firrec =
-                new FirebaseRecyclerAdapter<Person_list, TouristGuideViewHolder>(
+        FirebaseRecyclerAdapter<Person_list,Travler_list_fragment.TouristListViewHolder> firrec =
+                new FirebaseRecyclerAdapter<Person_list, TouristListViewHolder>(
                         Person_list.class,
                         R.layout.rec_single_layout,
-                        TouristGuideViewHolder.class,
-                        mTouristGuide
+                       TouristListViewHolder.class,
+                        mTourist
                 ) {
                     @Override
-                    protected void populateViewHolder(TouristGuideViewHolder viewHolder, Person_list model, int position) {
-                            viewHolder.setImage(model.getImage());
-                            viewHolder.setName(model.getName());
-                            viewHolder.setStatus(model.getStatus());
+                    protected void populateViewHolder(TouristListViewHolder viewHolder, Person_list model, int position) {
+                        viewHolder.setImage(model.getImage());
+                        viewHolder.setName(model.getName());
+                        viewHolder.setStatus(model.getStatus());
                     }
 
                     @Override
@@ -74,18 +73,16 @@ public class TouristGuide_list_fragment extends Fragment {
                     }
                 };
 
-        mTouristGuideList.setAdapter(firrec);
+        mTouristList.setAdapter(firrec);
 
 
 
 
     }
 
-
-
-    public static class TouristGuideViewHolder extends RecyclerView.ViewHolder{
+    public static class TouristListViewHolder extends RecyclerView.ViewHolder{
         View mView;
-        public TouristGuideViewHolder(View itemView) {
+        public TouristListViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
         }
@@ -93,11 +90,11 @@ public class TouristGuide_list_fragment extends Fragment {
 
         void setImage(String s){
             ImageView img = (ImageView) mView.findViewById(R.id.rec_single_image);
-           if (!s.equals("default")){
-               Picasso.with(mView.getContext())
-                       .load(s)
-                       .into(img);
-           }
+            if (!s.equals("default")){
+                Picasso.with(mView.getContext())
+                        .load(s)
+                        .into(img);
+            }
 
 
         }
