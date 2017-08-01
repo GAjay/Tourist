@@ -85,7 +85,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private Button m_zoomin, m_zoomout;
     private int zoom_amount = 15;
-    private CircleImageView findHospital,findResturent,findpolice;
+    private CircleImageView findHospital, findResturent, findpolice;
 
     private int PROXIMITY_RADIUS = 15000;
 
@@ -94,6 +94,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private Double longitude, latitude;
 
     private NearByPlaceDialog nearByPlaceDialog;
+    private String searchType;
+
+
+    private boolean onexecuting= false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +105,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_detail);
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -114,14 +117,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
-        }else{
+        } else {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
             init();
             buildGoogleApiClient();
         }
-
 
 
         Intent intent = getIntent();
@@ -151,8 +153,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
 
-                if(zoom_amount<160){
-                    zoom_amount+=2;
+                if (zoom_amount < 160) {
+                    zoom_amount += 2;
                     set_map_zoom(zoom_amount);
                 } else {
                     showToast("At Max zoom leve", Toast.LENGTH_SHORT);
@@ -164,9 +166,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
 
-                if(zoom_amount>2){
-                    zoom_amount-=2;
-                   // nearByPlaceDialog.dismiss();
+                if (zoom_amount > 2) {
+                    zoom_amount -= 2;
+                    // nearByPlaceDialog.dismiss();
 
                     set_map_zoom(zoom_amount);
                 } else {
@@ -178,6 +180,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         findHospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 execute("hospital");
             }
         });
@@ -250,13 +253,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
 
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlaceUrl.append("location="+longitude+","+latitude);
-        googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
-        googlePlaceUrl.append("&type="+nearbyPlace);
+        googlePlaceUrl.append("location=" + longitude + "," + latitude);
+        googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
+        googlePlaceUrl.append("&type=" + nearbyPlace);
         googlePlaceUrl.append("&sensor=true");
-        googlePlaceUrl.append("&key="+"AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
+        googlePlaceUrl.append("&key=" + "AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
 
-        Log.d("MapsActivity", "url = "+googlePlaceUrl.toString());
+        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
 
@@ -286,38 +289,54 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void execute(String type) {
 
-        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(!onexecuting){
+            onexecuting=!onexecuting;
+            searchType = type;
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-        } else {
-
-            if (haveNetworkConnection() == true) {
-                String url = getUrl(latitude, longitude, type);
-                Object[] DataTransfer = new Object[4];
-                DataTransfer[0] = mMap;
-                DataTransfer[1] = url;
-                DataTransfer[2] = getBaseContext();
-                DataTransfer[3] = this;
-                new GetNearbyPlacesData().execute(DataTransfer);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                buildAlertMessageNoGps();
             } else {
-                Snackbar.make(findViewById(R.id.home_nav), "No Internet Connection", Snackbar.LENGTH_LONG)
-                        .show();
-            }
 
+                if (haveNetworkConnection() == true) {
+
+                    String url = getUrl(latitude, longitude, searchType);
+                    Object[] DataTransfer = new Object[4];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = getBaseContext();
+                    DataTransfer[3] = this;
+                    new GetNearbyPlacesData().execute(DataTransfer);
+                } else {
+                    Snackbar.make(findViewById(R.id.home_nav), "No Internet Connection", Snackbar.LENGTH_LONG)
+                            .show();
+                }
+
+            }
+        }else{
+            showToast("You Have another process running\nPlease wait till its done",Toast.LENGTH_LONG);
         }
 
-    }
 
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == 0) {
             String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             if (provider != null) {
+                if (haveNetworkConnection() == true) {
 
-                //Start searching for location and update the location text when update available.
-// Do whatever you want
-                showToast("Gps enabled", Toast.LENGTH_LONG);
+                    String url = getUrl(latitude, longitude, searchType);
+                    Object[] DataTransfer = new Object[4];
+                    DataTransfer[0] = mMap;
+                    DataTransfer[1] = url;
+                    DataTransfer[2] = getBaseContext();
+                    DataTransfer[3] = this;
+                    new GetNearbyPlacesData().execute(DataTransfer);
+                } else {
+                    Snackbar.make(findViewById(R.id.home_nav), "No Internet Connection", Snackbar.LENGTH_LONG)
+                            .show();
+                }
             } else {
                 //Users did not switch on the GPS
             }
@@ -364,6 +383,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList) {
         nearByPlaceDialog = new NearByPlaceDialog();
-        nearByPlaceDialog.showDialog(DetailActivity.this,"",nearbyPlacesList);
+        nearByPlaceDialog.showDialog(DetailActivity.this, "", nearbyPlacesList);
+        onexecuting = !onexecuting;
     }
 }
