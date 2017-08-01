@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -117,9 +118,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             }
 
         } else {
-//oise ni agor code remove kora
-          
-          
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            init();
+            buildGoogleApiClient();
+        }
 
 
         Intent intent = getIntent();
