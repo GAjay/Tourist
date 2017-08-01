@@ -73,8 +73,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, OnNearByFound {
 
-    public String name;
-    public String image;
+    public String place_name;
+    public String place_image;
     private String descriptipn;
     private ImageView mPlaceImage;
     private TextView mPlaceName;
@@ -92,8 +92,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private GoogleApiClient mGoogleApiClient;
 
     private Double longitude, latitude;
-
-    private ArrayList<PlaceDetails> nearbyPlacesList;
 
     private NearByPlaceDialog nearByPlaceDialog;
 
@@ -130,13 +128,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         Bundle extras = intent.getExtras();
         longitude = Double.parseDouble(extras.getString("Lang"));
         latitude = Double.parseDouble(extras.getString("Lat"));
-        name = extras.getString("Name");
-        image = extras.getString("Image");
+        place_name = extras.getString("Name");
+        place_image = extras.getString("Image");
         descriptipn = extras.getString("Description");
 
-        mPlaceName.setText(name);
+        mPlaceName.setText(place_name);
         desc_textview.setText(descriptipn);
-        Picasso.with(this).load(image).into(mPlaceImage);
+        Picasso.with(this).load(place_image).into(mPlaceImage);
     }
 
     private void init() {
@@ -205,13 +203,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             mMap = googleMap;
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
-            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(name)
+            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(place_name)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(latLng);
             circleOptions.radius(300);
-            //circleOptions.strokeColor(Color.BLACK);
             circleOptions.fillColor(0x30ff0000);
             circleOptions.strokeWidth(10);
             mMap.addCircle(circleOptions);
@@ -251,17 +248,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
-
-
-
-        showToast(latitude+" "+longitude,1);
-
-        // 24.8955847,91.864673
-
-
-       // double latitude1 = 24.8955847, longitude1 =91.864673;
-
-
 
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location="+longitude+","+latitude);
