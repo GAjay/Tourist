@@ -75,8 +75,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     public String name;
     public String image;
-    public String lan;
-    public String lat;
     private String descriptipn;
     private ImageView mPlaceImage;
     private TextView mPlaceName;
@@ -89,7 +87,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private int zoom_amount = 15;
     private CircleImageView findHospital,findResturent,findpolice;
 
-    private int PROXIMITY_RADIUS = 9000;
+    private int PROXIMITY_RADIUS = 15000;
 
     private GoogleApiClient mGoogleApiClient;
 
