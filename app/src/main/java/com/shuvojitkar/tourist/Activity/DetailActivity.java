@@ -66,6 +66,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -83,20 +85,17 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private LatLng latLng;
     private TextView desc_textview;
 
-    private Button m_zoomin, m_zoomout, findHospital, findResturent;
+    private Button m_zoomin, m_zoomout;
     private int zoom_amount = 15;
+    private CircleImageView findHospital,findResturent,findpolice;
 
-    private int PROXIMITY_RADIUS = 1300;
+    private int PROXIMITY_RADIUS = 9000;
 
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-    private Marker mCurrLocationMarker;
-    private LocationRequest mLocationRequest;
 
     private Double longitude, latitude;
 
     private ArrayList<PlaceDetails> nearbyPlacesList;
-    private int loop;
 
     private NearByPlaceDialog nearByPlaceDialog;
 
@@ -104,9 +103,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-
-        //Check For Permission
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -151,7 +147,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         desc_textview = (TextView) findViewById(R.id.descrition_textview);
         m_zoomin = (Button) findViewById(R.id.map_zoomin);
         m_zoomout = (Button) findViewById(R.id.map_zoomout);
-        findHospital = (Button) findViewById(R.id.hsp_button);
+        findHospital = (CircleImageView) findViewById(R.id.hsp_button);
+        findResturent = (CircleImageView) findViewById(R.id.res_button);
+        findpolice = (CircleImageView) findViewById(R.id.police_button);
 
         m_zoomin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +183,18 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 execute("hospital");
+            }
+        });
+        findpolice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                execute("police");
+            }
+        });
+        findResturent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                execute("restaurant");
             }
         });
 
@@ -258,7 +268,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location="+longitude+","+latitude);
         googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
-        googlePlaceUrl.append("&type="+"hospital");
+        googlePlaceUrl.append("&type="+nearbyPlace);
         googlePlaceUrl.append("&sensor=true");
         googlePlaceUrl.append("&key="+"AIzaSyD-2lbqP9aonaHTxg3r_8L4PgzRx0SEdZ8");
 

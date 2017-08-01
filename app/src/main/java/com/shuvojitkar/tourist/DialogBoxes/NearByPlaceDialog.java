@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import android.support.v7.app.*;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class NearByPlaceDialog {
     private AlertDialog dialog;
     private LinearLayoutManager linearLayoutManager;
     private Activity activity;
+
 
     public void showDialog(Activity activity, String msg, ArrayList<PlaceDetails> placeDetailsArrayList) {
         this.placeDetailsArrayList = placeDetailsArrayList;
@@ -82,9 +84,13 @@ public class NearByPlaceDialog {
         }
 
         public class RecHolder extends RecyclerView.ViewHolder {
-            TextView place_name,place_vicinity;
+            private LinearLayout linearLayout;
+
+            private TextView place_name,place_vicinity;
             public RecHolder(View itemView) {
                 super(itemView);
+                linearLayout = (LinearLayout) itemView.findViewById(R.id.list_main_layout);
+                linearLayout.setMinimumWidth(dialog.getWindow().getWindowManager().getDefaultDisplay().getWidth());
                 place_name = (TextView) itemView.findViewById(R.id.place_name);
                 place_vicinity = (TextView) itemView.findViewById(R.id.place_vicinity);
             }
