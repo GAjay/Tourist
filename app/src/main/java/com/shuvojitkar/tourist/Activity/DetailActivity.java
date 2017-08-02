@@ -13,6 +13,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -96,7 +97,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private String searchType;
 
 
-    private boolean onexecuting= false;
+    private boolean onexecuting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,23 +117,22 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
-        } else {
-//oise ni agor code remove kora
-          
-          
+        }
+
 
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
+        showToast(extras.getString("Lang") + "Hello", Toast.LENGTH_SHORT);
         longitude = Double.parseDouble(extras.getString("Lang"));
         latitude = Double.parseDouble(extras.getString("Lat"));
         place_name = extras.getString("Name");
         place_image = extras.getString("Image");
         descriptipn = extras.getString("Description");
-
         mPlaceName.setText(place_name);
         desc_textview.setText(descriptipn);
         Picasso.with(this).load(place_image).into(mPlaceImage);
+
     }
 
     private void init() {
@@ -164,7 +164,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 if (zoom_amount > 2) {
                     zoom_amount -= 2;
-                    // nearByPlaceDialog.dismiss();
 
                     set_map_zoom(zoom_amount);
                 } else {
@@ -204,7 +203,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
             Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(place_name)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(latLng);
             circleOptions.radius(300);
@@ -285,8 +283,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void execute(String type) {
 
-        if(!onexecuting){
-            onexecuting=!onexecuting;
+        if (!onexecuting) {
+            onexecuting = !onexecuting;
             searchType = type;
             final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -309,8 +307,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
 
             }
-        }else{
-            showToast("You Have another process running\nPlease wait till its done",Toast.LENGTH_LONG);
+        } else {
+            showToast("You Have another process running\nPlease wait till its done", Toast.LENGTH_LONG);
         }
 
 
@@ -363,7 +361,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
