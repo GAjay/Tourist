@@ -285,8 +285,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void execute(String type) {
 
-        //Todo
-
         if (searchType.equals(type) && dialog != null) {
             dialog.show();
             Toast.makeText(this, "Showing prev dialog", Toast.LENGTH_SHORT).show();
