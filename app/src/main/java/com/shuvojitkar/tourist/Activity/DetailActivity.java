@@ -120,6 +120,13 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
+
+        } else {
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.map);
+            mapFragment.getMapAsync(this);
+            init();
+            buildGoogleApiClient();
         }
 
 

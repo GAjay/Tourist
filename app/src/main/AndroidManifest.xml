@@ -39,10 +39,15 @@
         <activity
             android:name=".Activity.LoginActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Activity.ProfileActivity" />
+
+        
         <activity
             android:name=".Activity.NearByPlaceDetailsMapActivity"
             android:label="@string/title_activity_near_by_place_details_map"></activity>
+
+        <activity android:name=".Activity.ProfileActivity"
+            android:parentActivityName=".MainActivity"></activity>
+
     </application>
 
 </manifest>
