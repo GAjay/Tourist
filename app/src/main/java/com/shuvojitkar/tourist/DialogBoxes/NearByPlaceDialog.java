@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,6 +18,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 
 import com.shuvojitkar.tourist.Activity.DetailActivity;
+import com.shuvojitkar.tourist.Activity.NearByPlaceDetailsMapActivity;
 import com.shuvojitkar.tourist.Map_Helpers.DownloadPlaceDetails;
 import com.shuvojitkar.tourist.Map_Helpers.GetNplaceDetails;
 import com.shuvojitkar.tourist.Map_Helpers.PlaceDetails;
@@ -48,11 +50,16 @@ public class NearByPlaceDialog {
     private LinearLayoutManager linearLayoutManager;
     private Activity activity;
     private int viewTracker = 1;
+    private double mainLat;
+    private double mainLan;
+    private String main_place_name;
 
-
-    public void showDialog(final Activity activity, String msg, ArrayList<PlaceDetails> placeDetailsArrayList1) {
+    public void showDialog(final Activity activity, ArrayList<PlaceDetails> placeDetailsArrayList1, Double lat, Double lan, String main_place_name) {
         this.placeDetailsArrayList = placeDetailsArrayList1;
         this.activity = activity;
+        this.mainLat = lat;
+        this.mainLan = lan;
+        this.main_place_name = main_place_name;
         builder = new AlertDialog.Builder(activity);
         view = activity.getLayoutInflater().inflate(R.layout.nearby_place_dialog, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.recview);
@@ -84,6 +91,13 @@ public class NearByPlaceDialog {
             }
         });
 
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         builder.setView(view);
         dialog = builder.create();
         dialog.show();
@@ -101,6 +115,25 @@ public class NearByPlaceDialog {
 
         @Override
         public void onBindViewHolder(RecyclerAdapter.RecHolder holder, int position) {
+            View v = holder.itemView;
+            v.setTag(position);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = (int) v.getTag();
+                    Intent intent = new Intent(activity, NearByPlaceDetailsMapActivity.class);
+                    intent.putExtra("NLat", placeDetailsArrayList.get(position).getLat());
+                    intent.putExtra("NLan", placeDetailsArrayList.get(position).getLan());
+                    intent.putExtra("MLat", mainLat);
+                    intent.putExtra("MLan", mainLan);
+                    intent.putExtra("NName", placeDetailsArrayList.get(position).getPlaceName());
+                    intent.putExtra("MName", main_place_name);
+
+
+                    activity.startActivity(intent);
+                    Toast.makeText(activity, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                }
+            });
             holder.bindData(placeDetailsArrayList.get(position));
 
         }
@@ -112,9 +145,7 @@ public class NearByPlaceDialog {
 
         public class RecHolder extends RecyclerView.ViewHolder {
             private LinearLayout linearLayout;
-
             private TextView place_name, place_vicinity;
-
             public RecHolder(View itemView) {
                 super(itemView);
                 linearLayout = (LinearLayout) itemView.findViewById(R.id.list_main_layout);

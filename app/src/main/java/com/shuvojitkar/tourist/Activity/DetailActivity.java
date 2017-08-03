@@ -123,7 +123,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        showToast(extras.getString("Lang") + "Hello", Toast.LENGTH_SHORT);
         longitude = Double.parseDouble(extras.getString("Lang"));
         latitude = Double.parseDouble(extras.getString("Lat"));
         place_name = extras.getString("Name");
@@ -377,7 +376,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList) {
         nearByPlaceDialog = new NearByPlaceDialog();
-        nearByPlaceDialog.showDialog(DetailActivity.this, "", nearbyPlacesList);
+        nearByPlaceDialog.showDialog(DetailActivity.this, nearbyPlacesList, latitude, longitude, place_name);
         onexecuting = !onexecuting;
     }
 }
