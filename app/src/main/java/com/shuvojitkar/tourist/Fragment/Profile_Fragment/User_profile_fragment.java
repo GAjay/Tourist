@@ -17,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.SiliCompressor;
 import com.shuvojitkar.tourist.Activity.LoginActivity;
 import com.shuvojitkar.tourist.GetFirebaseRef;
 import com.shuvojitkar.tourist.MainActivity;
@@ -67,6 +69,7 @@ public class User_profile_fragment extends Fragment {
     private  RecyclerView mUserProRec;
     private static int GALLERY_PICK = 1;
     private DatabaseReference mRootRef;
+    private DatabaseReference mUserProfileDb;
     private StorageReference mImageStorageReference;
     private String UserId;
     private FirebaseUser firebaseUser;
@@ -74,13 +77,18 @@ public class User_profile_fragment extends Fragment {
     private CircleImageView img;
     private ProgressDialog img_up_pd;
     private FloatingActionButton mUserProfab;
+
     View v;
     View cn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.profile_user_profile_fragment,container,false);
         init(v);
+        mUserProRec.setHasFixedSize(true);
+        mUserProRec.setLayoutManager(new LinearLayoutManager(getContext()));
+
         cn=v;
+
 
       mUserProfab.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -110,13 +118,13 @@ public class User_profile_fragment extends Fragment {
 
               post.setOnClickListener(new View.OnClickListener() {
                   @Override
-                  public void onClick(View v) {
-                      final String title =titleEdit.getEditText().getText().toString();
-                      final String Description = descriptionEdit.getEditText().getText().toString();
-                      if (title.equals("")|| Description.equals("")){
-                          Toast.makeText(v.getContext(), "Please fill the form", Toast.LENGTH_SHORT).show();
+                        public void onClick(View v) {
+                            final String title =titleEdit.getEditText().getText().toString();
+                            final String Description = descriptionEdit.getEditText().getText().toString();
+                            if (title.equals("")|| Description.equals("")){
+                             Toast.makeText(v.getContext(), "Please fill the form", Toast.LENGTH_SHORT).show();
 
-                      }else {
+                        }   else {
                                 if (resultUri==null){
                                     Toast.makeText(v.getContext(), "Nullaaaaaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
 
@@ -127,29 +135,8 @@ public class User_profile_fragment extends Fragment {
                                     img_up_pd.setCanceledOnTouchOutside(false);
                                     img_up_pd.show();
 
-                                   /* //Now Compress it for thumbline
-                                    File image_post = new File(resultUri.getPath());
-                                    Bitmap image_bitmap = null;
-                                    try {
-                                        image_bitmap = new Compressor(v.getContext())
-                                                .setQuality(75)
-                                                .setMaxWidth(300)
-                                                .setMaxHeight(300)
-                                                .compressToBitmap(image_post);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
 
-                *//*The putBytes() method is the simplest way to upload a file to Cloud Storage.
-                putBytes() takes a byte[] and returns an UploadTask that you can use to
-                manage and monitor the status of the upload.*//*
-                //Process the bitmap for Firebase
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    image_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                                    final byte[] thumb_byte = baos.toByteArray();*/
-
-
-                                        String image_id = random()+".jpg";
+                                    String image_id = random()+".jpg";
                                     //Storage Reference for main image
                                     StorageReference filepath = mImageStorageReference.child("UserPost").child(image_id);
 
@@ -164,7 +151,6 @@ public class User_profile_fragment extends Fragment {
                                                 final DatabaseReference  mUserDatabase02 = GetFirebaseRef.GetDbIns().getReference().child("tourist");
                                                 final String pushkey = pushdb.getKey();
                                                 final Map  imageUp = new HashMap();
-
 
                                                 mUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
@@ -253,28 +239,21 @@ public class User_profile_fragment extends Fragment {
 
                                                     }
                                                 });
-
-
-
-
-
-                                                //sss
                                             }
                                         }
                                     });
 
                                 }
-
                       }
                   }
               });
 
-
-
-
               dialog.show();
           }
       });
+
+
+
 
 
         return v;
@@ -293,13 +272,6 @@ public class User_profile_fragment extends Fragment {
     }
 
 
-    private void SelcetImage(Context cn) {
-
-        CropImage.activity().setAspectRatio(1,1)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setMinCropWindowSize(500,500)
-                .start(cn,this);
-    }
 
     private void init(View v) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -308,8 +280,8 @@ public class User_profile_fragment extends Fragment {
         mRootRef = GetFirebaseRef.GetDbIns().getReference();
         mUserProfab = (FloatingActionButton) v.findViewById(R.id.profile_fab_btn);
         mImageStorageReference = FirebaseStorage.getInstance().getReference();
-     /*   mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
-*/
+       mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
+
     }
 
 
