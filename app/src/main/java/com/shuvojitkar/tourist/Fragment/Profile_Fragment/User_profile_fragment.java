@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,6 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.iceteck.silicompressorr.SiliCompressor;
 import com.shuvojitkar.tourist.Activity.LoginActivity;
+import com.shuvojitkar.tourist.Activity.UserProfileSettings;
 import com.shuvojitkar.tourist.GetFirebaseRef;
 import com.shuvojitkar.tourist.MainActivity;
 import com.shuvojitkar.tourist.R;
@@ -70,6 +72,7 @@ public class User_profile_fragment extends Fragment {
     private static int GALLERY_PICK = 1;
     private DatabaseReference mRootRef;
     private DatabaseReference mUserProfileDb;
+    private DatabaseReference mUserProfileDb2;
     private StorageReference mImageStorageReference;
     private String UserId;
     private FirebaseUser firebaseUser;
@@ -77,6 +80,10 @@ public class User_profile_fragment extends Fragment {
     private CircleImageView img;
     private ProgressDialog img_up_pd;
     private FloatingActionButton mUserProfab;
+
+    TextView UserNameTxt,UserStatusTxt;
+    CircleImageView UserProFileImage;
+    Button UserEditSettingbtn;
 
     View v;
     View cn;
@@ -88,6 +95,69 @@ public class User_profile_fragment extends Fragment {
         mUserProRec.setLayoutManager(new LinearLayoutManager(getContext()));
 
         cn=v;
+
+        UserEditSettingbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), UserProfileSettings.class).putExtra("Userid",UserId));
+            }
+        });
+
+
+      mUserProfileDb.child("touristGuide").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(UserId).exists()){
+
+                    Toast.makeText(v.getContext(), "hgghho", Toast.LENGTH_SHORT).show();
+                    String name = dataSnapshot.child(UserId).child("name").getValue().toString();
+                    String status = dataSnapshot.child(UserId).child("status").getValue().toString();
+                    String image = dataSnapshot.child(UserId).child("image").getValue().toString();
+                    UserNameTxt.setText(name);
+                    UserStatusTxt.setText(status);
+
+                    if (!image.equals("")||!image.equals("default")){
+                        Picasso.with(v.getContext()).load(image).placeholder(R.drawable.person2).into(UserProFileImage);
+                    }
+
+
+
+                }else {
+                    mUserProfileDb2.child("tourist").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(UserId).exists()){
+
+                                Toast.makeText(v.getContext(), "hgghho", Toast.LENGTH_SHORT).show();
+                                String name = dataSnapshot.child(UserId).child("name").getValue().toString();
+                                String status = dataSnapshot.child(UserId).child("status").getValue().toString();
+                                String image = dataSnapshot.child(UserId).child("image").getValue().toString();
+                                UserNameTxt.setText(name);
+                                UserStatusTxt.setText(status);
+
+                                if (!image.equals("")||!image.equals("default")){
+                                    Picasso.with(v.getContext()).load(image).placeholder(R.drawable.person2).into(UserProFileImage);
+                                }
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
       mUserProfab.setOnClickListener(new View.OnClickListener() {
@@ -252,10 +322,6 @@ public class User_profile_fragment extends Fragment {
           }
       });
 
-
-
-
-
         return v;
     }
 
@@ -271,8 +337,6 @@ public class User_profile_fragment extends Fragment {
         }
     }
 
-
-
     private void init(View v) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         UserId = firebaseUser.getUid();
@@ -280,7 +344,17 @@ public class User_profile_fragment extends Fragment {
         mRootRef = GetFirebaseRef.GetDbIns().getReference();
         mUserProfab = (FloatingActionButton) v.findViewById(R.id.profile_fab_btn);
         mImageStorageReference = FirebaseStorage.getInstance().getReference();
-       mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
+         mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
+
+        mUserProfileDb = GetFirebaseRef.GetDbIns().getReference();
+        mUserProfileDb2 = GetFirebaseRef.GetDbIns().getReference();
+
+
+
+        UserNameTxt = (TextView) v.findViewById(R.id.UserName);
+        UserStatusTxt = (TextView) v.findViewById(R.id.UserStatus);
+        UserProFileImage = (CircleImageView) v.findViewById(R.id.UserProImage);
+        UserEditSettingbtn = (Button) v.findViewById(R.id.UserEditbtn);
 
     }
 

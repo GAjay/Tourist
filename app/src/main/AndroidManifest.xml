@@ -38,8 +38,10 @@
         <activity
             android:name=".Activity.LoginActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".Activity.ProfileActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".Activity.UserProfileSettings"></activity>
     </application>
 
 </manifest>
