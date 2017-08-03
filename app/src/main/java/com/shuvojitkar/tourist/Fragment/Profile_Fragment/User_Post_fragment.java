@@ -37,19 +37,20 @@ public class User_Post_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.profile_user_post_fragment,container,false);
+
         init(v);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager lin = new LinearLayoutManager(getContext());
         lin.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(lin);
-
         return v;
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
-       Query query =mRootRef.orderByValue();
+        Query query =mRootRef.orderByValue();
         FirebaseRecyclerAdapter <User_Post,User_post_fragment_VH> fr = new FirebaseRecyclerAdapter<User_Post, User_post_fragment_VH>(
                 User_Post.class,
                 R.layout.user_post_rec_layout,
@@ -62,7 +63,6 @@ public class User_Post_fragment extends Fragment {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDescription(model.getDescription());
-
 
                 mDatabaseRef.child(model.getUser_type()).child(model.getUserid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -79,12 +79,6 @@ public class User_Post_fragment extends Fragment {
 
                     }
                 });
-
-
-
-
-
-
             }
         };
         mRecyclerView.setAdapter(fr);
