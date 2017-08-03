@@ -22,6 +22,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
+        android:visibility="gone"
+        android:id="@+id/user_post_image"
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:layout_height="100dp" />
@@ -29,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
+        android:id="@+id/user_post_title"
         android:layout_marginTop="15dp"
         android:layout_height="wrap_content">
         <EditText
@@ -39,6 +42,7 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_marginRight="20dp"
+        android:id="@+id/user_post_description"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content">
@@ -47,12 +51,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:background="#ff7a7a"
+        android:text="Add Image"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:layout_marginRight="20dp"
 
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/user_add_image"
+        android:layout_height="wrap_content" />
     <Button
         android:layout_width="wrap_content"
         android:layout_gravity="center"
+        android:id="@+id/user_post_go_btn"
         android:layout_marginTop="10dp"
         android:text="Post"
+        android:background="@drawable/layout_corner"
         android:layout_height="wrap_content" />
 
 </LinearLayout>
