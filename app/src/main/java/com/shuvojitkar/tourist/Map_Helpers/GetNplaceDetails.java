@@ -58,9 +58,12 @@ public class GetNplaceDetails extends AsyncTask<Object, String, String> {
             JSONObject js = new JSONObject(result);
             JSONObject jsr = js.getJSONObject("result");
             String s = jsr.getString("icon").toString();
+            String phone = jsr.getString("formatted_phone_number");
+            placeDetails.setPhoneNumber(phone);
             CircleImageView img = (CircleImageView) view.findViewById(R.id.list_place_image);
             Picasso.with(img.getContext()).load(s).into(img);
         } catch (JSONException e) {
+            placeDetails.setPhoneNumber("-1");
         }
     }
 }

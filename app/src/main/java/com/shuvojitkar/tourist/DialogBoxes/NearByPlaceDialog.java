@@ -46,7 +46,7 @@ public class NearByPlaceDialog {
     private ArrayList<PlaceDetails> placeDetailsArrayList;
     private AlertDialog.Builder builder;
     private View view;
-    private AlertDialog dialog;
+    private AlertDialog dialog = null;
     private LinearLayoutManager linearLayoutManager;
     private Activity activity;
     private int viewTracker = 1;
@@ -54,7 +54,7 @@ public class NearByPlaceDialog {
     private double mainLan;
     private String main_place_name;
 
-    public void showDialog(final Activity activity, ArrayList<PlaceDetails> placeDetailsArrayList1, Double lat, Double lan, String main_place_name) {
+    public NearByPlaceDialog(final Activity activity, ArrayList<PlaceDetails> placeDetailsArrayList1, Double lat, Double lan, String main_place_name) {
         this.placeDetailsArrayList = placeDetailsArrayList1;
         this.activity = activity;
         this.mainLat = lat;
@@ -100,8 +100,13 @@ public class NearByPlaceDialog {
 
         builder.setView(view);
         dialog = builder.create();
-        dialog.show();
+        // dialog.show();
 
+    }
+
+
+    public AlertDialog getDialog() {
+        return dialog;
     }
 
 
@@ -121,21 +126,21 @@ public class NearByPlaceDialog {
                 @Override
                 public void onClick(View v) {
                     int position = (int) v.getTag();
-                    Intent intent = new Intent(activity, NearByPlaceDetailsMapActivity.class);
-                    intent.putExtra("NLat", placeDetailsArrayList.get(position).getLat());
-                    intent.putExtra("NLan", placeDetailsArrayList.get(position).getLan());
-                    intent.putExtra("MLat", mainLat);
-                    intent.putExtra("MLan", mainLan);
-                    intent.putExtra("NName", placeDetailsArrayList.get(position).getPlaceName());
-                    intent.putExtra("MName", main_place_name);
-
-
-                    activity.startActivity(intent);
-                    Toast.makeText(activity, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                    if (!placeDetailsArrayList.get(position).getPhoneNumber().equals("-NA-")) {
+                        Intent intent = new Intent(activity, NearByPlaceDetailsMapActivity.class);
+                        intent.putExtra("NLat", placeDetailsArrayList.get(position).getLat());
+                        intent.putExtra("NLan", placeDetailsArrayList.get(position).getLan());
+                        intent.putExtra("Number", placeDetailsArrayList.get(position).getPhoneNumber());
+                        intent.putExtra("MLat", mainLat);
+                        intent.putExtra("MLan", mainLan);
+                        intent.putExtra("NName", placeDetailsArrayList.get(position).getPlaceName());
+                        intent.putExtra("MName", main_place_name);
+                        activity.startActivity(intent);
+                    } else
+                        Toast.makeText(activity, "Please Wait a moment", Toast.LENGTH_SHORT).show();
                 }
             });
             holder.bindData(placeDetailsArrayList.get(position));
-
         }
 
         @Override

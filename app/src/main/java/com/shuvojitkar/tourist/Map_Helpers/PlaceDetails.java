@@ -7,13 +7,14 @@ package com.shuvojitkar.tourist.Map_Helpers;
 public class PlaceDetails {
     private String lan;
     private String lat;
-    private String longName;
-    private String shortName;
-    private String address;
-    private String reference;
-    private String icon;
-    private String phoneNumber;
-    private String vicinity;
+    private String longName = "-NA-";
+    private String shortName = "-NA-";
+    private String address = "-NA-";
+    private String reference = "-NA-";
+    private String icon = "-NA-";
+    private String phoneNumber = "-NA-";
+    private String vicinity = "-NA-";
+
     private String placeName;
 
     public String getIcon() {

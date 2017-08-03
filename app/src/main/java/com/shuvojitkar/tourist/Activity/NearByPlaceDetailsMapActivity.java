@@ -1,8 +1,15 @@
 package com.shuvojitkar.tourist.Activity;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,12 +35,18 @@ import java.util.List;
 public class NearByPlaceDetailsMapActivity extends FragmentActivity implements OnMapReadyCallback, OnRouteFound {
 
     private GoogleMap mMap;
+
     private double nearbyplaceLat;
     private double nearbyplaceLan;
     private double mainLat;
     private double mainLan;
     private String newrbyplacename;
     private String main_place_name;
+    private String phone_number;
+
+    private TextView distance_textview;
+    private TextView duration_textview;
+    private TextView phonenumber_textview;
 
 
     private List<Marker> originMarkers = new ArrayList<>();
@@ -48,8 +61,15 @@ public class NearByPlaceDetailsMapActivity extends FragmentActivity implements O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+        distance_textview = (TextView) findViewById(R.id.distance_textview);
+        duration_textview = (TextView) findViewById(R.id.duration_textview);
+        phonenumber_textview = (TextView) findViewById(R.id.ringer_textview);
+
         newrbyplacename = getIntent().getStringExtra("NName");
         main_place_name = getIntent().getStringExtra("MName");
+        phone_number = getIntent().getStringExtra("Number");
         nearbyplaceLan = getIntent().getDoubleExtra("NLan", 0);
         nearbyplaceLat = getIntent().getDoubleExtra("NLat", 0);
         mainLat = getIntent().getDoubleExtra("MLat", 0);
@@ -110,9 +130,31 @@ public class NearByPlaceDetailsMapActivity extends FragmentActivity implements O
                 polylineOptions.add(route.points.get(i));
             polylinePaths.add(mMap.addPolyline(polylineOptions));
 
-            Toast.makeText(getBaseContext(), distance.text + distance.value, Toast.LENGTH_LONG).show();
+            distance_textview.setText(distance.text);
+            duration_textview.setText(duration.text);
+            if (!phone_number.equals("-1")) {
+                phonenumber_textview.setText(phone_number);
+                phonenumber_textview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:" + phone_number));
+                        if (ActivityCompat.checkSelfPermission(NearByPlaceDetailsMapActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(NearByPlaceDetailsMapActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+                            return;
+                        }
+                        try {
+                            startActivity(callIntent);
+                        } catch (Exception e) {
+                            Toast.makeText(NearByPlaceDetailsMapActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
-            Toast.makeText(getBaseContext(), duration.text + duration.value, Toast.LENGTH_LONG).show();
+            } else {
+                phonenumber_textview.setText("Not Provided");
+            }
+
 
 
         }

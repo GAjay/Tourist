@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,7 +95,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private Double longitude, latitude;
 
     private NearByPlaceDialog nearByPlaceDialog;
-    private String searchType;
+    private String searchType = "notset";
+
+    private AlertDialog dialog = null;
 
 
     private boolean onexecuting = false;
@@ -282,6 +285,14 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void execute(String type) {
 
+        //Todo
+
+        if (searchType.equals(type) && dialog != null) {
+            dialog.show();
+            Toast.makeText(this, "Showing prev dialog", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!onexecuting) {
             onexecuting = !onexecuting;
             searchType = type;
@@ -375,8 +386,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList) {
-        nearByPlaceDialog = new NearByPlaceDialog();
-        nearByPlaceDialog.showDialog(DetailActivity.this, nearbyPlacesList, latitude, longitude, place_name);
+        nearByPlaceDialog = new NearByPlaceDialog(DetailActivity.this, nearbyPlacesList, latitude, longitude, place_name);
+        dialog = nearByPlaceDialog.getDialog();
+        dialog.show();
         onexecuting = !onexecuting;
     }
 }
