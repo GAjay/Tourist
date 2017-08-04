@@ -26,6 +26,7 @@ import com.shuvojitkar.tourist.R;
 import com.squareup.picasso.Picasso;
 
 import android.support.v7.app.*;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,10 +65,14 @@ public class NearByPlaceDialog {
         view = activity.getLayoutInflater().inflate(R.layout.nearby_place_dialog, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.recview);
         linearLayoutManager = new LinearLayoutManager(activity);
+        // linearLayoutManager.setAutoMeasureEnabled(false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         RecyclerAdapter adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
+
+        // recyclerView.setHasFixedSize(true);
+
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -114,8 +119,9 @@ public class NearByPlaceDialog {
 
         @Override
         public RecyclerAdapter.RecHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            return new RecHolder(LayoutInflater.from(activity).inflate(R.layout.nearby_place_list_base, null));
+            View v = LayoutInflater.from(activity).inflate(R.layout.nearby_place_list_base, parent, false);
+            v.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+            return new RecHolder(v);
         }
 
         @Override
@@ -154,6 +160,7 @@ public class NearByPlaceDialog {
             public RecHolder(View itemView) {
                 super(itemView);
                 linearLayout = (LinearLayout) itemView.findViewById(R.id.list_main_layout);
+
                 linearLayout.setMinimumWidth(dialog.getWindow().getWindowManager().getDefaultDisplay().getWidth());
                 place_name = (TextView) itemView.findViewById(R.id.place_name);
                 place_vicinity = (TextView) itemView.findViewById(R.id.place_vicinity);
@@ -165,6 +172,4 @@ public class NearByPlaceDialog {
             }
         }
     }
-
-
 }
