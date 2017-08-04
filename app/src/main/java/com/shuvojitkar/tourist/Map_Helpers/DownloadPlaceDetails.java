@@ -15,7 +15,7 @@ import java.net.URL;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Nuhel on 8/2/2017.
+ * Created by Nuhel on 7/27/2017.
  */
 
 public class DownloadPlaceDetails {

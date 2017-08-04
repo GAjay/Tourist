@@ -1,16 +1,12 @@
 package com.shuvojitkar.tourist.Map_Helpers;
 
 /**
- * Created by Nuhel on 7/21/2017.
+ * Created by Nuhel on 8/2/2017.
  */
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-/**
- * Created by Mai Thanh Hiep on 4/3/2016.
- */
 public class Route {
     public Distance distance;
     public Duration duration;

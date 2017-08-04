@@ -66,20 +66,32 @@ import id.zelory.compressor.Compressor;
  */
 
 public class User_profile_fragment extends Fragment {
-    private  RecyclerView mUserProRec;
     private static int GALLERY_PICK = 1;
+    private static Uri resultUri;
+    View v;
+    View cn;
+    private RecyclerView mUserProRec;
     private DatabaseReference mRootRef;
     private DatabaseReference mUserProfileDb;
     private StorageReference mImageStorageReference;
     private String UserId;
     private FirebaseUser firebaseUser;
-    private static Uri resultUri;
     private CircleImageView img;
     private ProgressDialog img_up_pd;
     private FloatingActionButton mUserProfab;
 
-    View v;
-    View cn;
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(10);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++) {
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.profile_user_profile_fragment,container,false);
@@ -259,7 +271,6 @@ public class User_profile_fragment extends Fragment {
         return v;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -271,8 +282,6 @@ public class User_profile_fragment extends Fragment {
         }
     }
 
-
-
     private void init(View v) {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         UserId = firebaseUser.getUid();
@@ -280,20 +289,7 @@ public class User_profile_fragment extends Fragment {
         mRootRef = GetFirebaseRef.GetDbIns().getReference();
         mUserProfab = (FloatingActionButton) v.findViewById(R.id.profile_fab_btn);
         mImageStorageReference = FirebaseStorage.getInstance().getReference();
-       mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
+        mUserProRec = (RecyclerView) v.findViewById(R.id.profile_post_rec);
 
-    }
-
-
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(10);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
     }
 }

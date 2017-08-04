@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Nuhel on 7/27/2017.
+ * Created by Nuhel on 7/30/2017.
  */
 
 public class GetNplaceDetails extends AsyncTask<Object, String, String> {

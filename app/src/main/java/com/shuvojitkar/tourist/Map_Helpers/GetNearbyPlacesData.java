@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Nuhel on 7/27/2017.
+ * Created by Nuhel on 7/30/2017.
  */
 
 public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
