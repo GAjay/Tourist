@@ -42,11 +42,10 @@
                     android:layout_toEndOf="@+id/user_rec_post_pro_img" />
                 <TextView
                     android:text="3 Sept 2017"
-                    android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/user_post_rec_datetime"
-                    android:layout_below="@id/user_post_rec_name"
+                    android:layout_below="@+id/user_post_rec_name"
                     android:layout_toEndOf="@+id/user_rec_post_pro_img" />
 
                <ImageView
