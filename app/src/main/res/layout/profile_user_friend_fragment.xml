@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<TextView
-    android:layout_width="match_parent"
-    android:text="Friends"
-    android:textSize="25sp"
-    android:gravity="center"
-    android:layout_height="match_parent" />
+ <android.support.v7.widget.RecyclerView
+     android:layout_width="match_parent"
+     android:id="@+id/User_Frnd_Rec"
+     android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

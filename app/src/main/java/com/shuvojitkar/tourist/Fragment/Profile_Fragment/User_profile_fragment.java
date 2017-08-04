@@ -71,7 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
 /**
- * Created by SHOBOJIT on 7/28/2017.
+ * Created by SHOBOJIT on 8/5/2017.
  */
 
 public class User_profile_fragment extends Fragment {
