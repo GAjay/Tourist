@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,10 +95,12 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private Double longitude, latitude;
 
     private NearByPlaceDialog nearByPlaceDialog;
-    private String searchType;
+    private String searchType = "notset";
+
+    private AlertDialog dialog = null;
 
 
-    private boolean onexecuting= false;
+    private boolean onexecuting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +120,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             }
 
+
         } else {
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
@@ -126,6 +130,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
 
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         longitude = Double.parseDouble(extras.getString("Lang"));
@@ -133,10 +138,10 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         place_name = extras.getString("Name");
         place_image = extras.getString("Image");
         descriptipn = extras.getString("Description");
-
         mPlaceName.setText(place_name);
         desc_textview.setText(descriptipn);
         Picasso.with(this).load(place_image).into(mPlaceImage);
+
     }
 
     private void init() {
@@ -168,7 +173,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 if (zoom_amount > 2) {
                     zoom_amount -= 2;
-                    // nearByPlaceDialog.dismiss();
 
                     set_map_zoom(zoom_amount);
                 } else {
@@ -208,7 +212,6 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
             mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom_amount));
             Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).title(place_name)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
             CircleOptions circleOptions = new CircleOptions();
             circleOptions.center(latLng);
             circleOptions.radius(300);
@@ -289,8 +292,14 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void execute(String type) {
 
-        if(!onexecuting){
-            onexecuting=!onexecuting;
+        if (searchType.equals(type) && dialog != null) {
+            dialog.show();
+            Toast.makeText(this, "Showing prev dialog", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!onexecuting) {
+            onexecuting = !onexecuting;
             searchType = type;
             final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -313,8 +322,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
                 }
 
             }
-        }else{
-            showToast("You Have another process running\nPlease wait till its done",Toast.LENGTH_LONG);
+        } else {
+            showToast("You Have another process running\nPlease wait till its done", Toast.LENGTH_LONG);
         }
 
 
@@ -367,7 +376,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
     private boolean haveNetworkConnection() {
         boolean haveConnectedWifi = false;
         boolean haveConnectedMobile = false;
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
             if (ni.getTypeName().equalsIgnoreCase("WIFI"))
@@ -382,8 +391,9 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void placeFound(ArrayList<PlaceDetails> nearbyPlacesList) {
-        nearByPlaceDialog = new NearByPlaceDialog();
-        nearByPlaceDialog.showDialog(DetailActivity.this, "", nearbyPlacesList);
+        nearByPlaceDialog = new NearByPlaceDialog(DetailActivity.this, nearbyPlacesList, latitude, longitude, place_name);
+        dialog = nearByPlaceDialog.getDialog();
+        dialog.show();
         onexecuting = !onexecuting;
     }
 }

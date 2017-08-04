@@ -7,11 +7,31 @@ package com.shuvojitkar.tourist.Map_Helpers;
 public class PlaceDetails {
     private String lan;
     private String lat;
-    private String longName;
-    private String shortName;
-    private String address;
-    private String reference;
+    private String longName = "-NA-";
+    private String shortName = "-NA-";
+    private String address = "-NA-";
+    private String reference = "-NA-";
+    private String icon = "-NA-";
+    private String phoneNumber = "-NA-";
+    private String vicinity = "-NA-";
 
+    private String placeName;
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getVicinity() {
         return vicinity;
@@ -21,9 +41,6 @@ public class PlaceDetails {
         this.vicinity = vicinity;
     }
 
-    private String vicinity;
-
-
     public String getPlaceName() {
         return placeName;
     }
@@ -32,9 +49,6 @@ public class PlaceDetails {
         this.placeName = placeName;
     }
 
-    private String placeName;
-
-
     public String getReference() {
         return reference;
     }
@@ -42,7 +56,6 @@ public class PlaceDetails {
     public void setReference(String reference) {
         this.reference = reference;
     }
-
 
     public Double getLan() {
         return Double.parseDouble(lan);

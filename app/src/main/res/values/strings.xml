@@ -8,4 +8,6 @@
         <item>Tourist Guide</item>
         <item>Traveler</item>
     </string-array>
+    <string name="title_activity_near_by_place_details_map">Map</string>
+    <string name="loading">Loading....</string>
 </resources>
