@@ -4,7 +4,10 @@
 
     <item
         android:id="@+id/main_setting_btn"
-        android:title="Account Setting" />
+        android:title="Account Settings" />
+    <!--<item-->
+        <!--android:id="@+id/main_create_btn"-->
+        <!--android:title="Create Account" />-->
     <item
         android:title="Sign in"
         android:id="@+id/main_login_btn"/>

@@ -27,6 +27,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.shuvojitkar.tourist.Activity.Create_Account_02;
+import com.shuvojitkar.tourist.Activity.Guide_Create_Account;
+import com.shuvojitkar.tourist.Activity.Tourist_Create_Account;
 import com.shuvojitkar.tourist.GetFirebaseRef;
 import com.shuvojitkar.tourist.R;
 
@@ -49,7 +52,21 @@ public class Register_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v= inflater.inflate(R.layout.register_fragment,container,false);
-        init(v);
+
+        v.findViewById(R.id.touristlogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(),Tourist_Create_Account.class));
+            }
+        });
+
+        v.findViewById(R.id.guidelogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(),Guide_Create_Account.class));
+            }
+        });
+       /* init(v);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
 
@@ -94,13 +111,13 @@ public class Register_Fragment extends Fragment {
 
                 }
             }
-        });
+        });*/
         return v;
 
     }
 
 
-    private void register_user(final String display_name, final String email, final String password, String accountType) {
+   /* private void register_user(final String display_name, final String email, final String password, String accountType) {
         mFirebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete( Task<AuthResult> task) {
@@ -172,17 +189,13 @@ public class Register_Fragment extends Fragment {
         });
 
     }
-
-    private void init(View v) {
-        mDisplayName = (TextInputLayout) v.findViewById(R.id.reg_display_name);
+*/
+/*    private void init(View v) {
+          mDisplayName = (TextInputLayout) v.findViewById(R.id.reg_display_name);
         mEmail = (TextInputLayout) v.findViewById(R.id.reg_email);
         mPassowrd = (TextInputLayout) v.findViewById(R.id.reg_password);
         mCreateAccountBtn = (Button) v.findViewById(R.id.reg_create_btn);
         mProgressDialog = new ProgressDialog(v.getContext());
         mSpinner = (Spinner) v.findViewById(R.id.reg_spinner);
-
-
-
-
-    }
+    }*/
 }

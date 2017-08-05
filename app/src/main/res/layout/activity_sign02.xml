@@ -8,17 +8,17 @@
     android:layout_height="match_parent"
     tools:context="com.shuvojitkar.tourist.Activity.UserProfileSettings">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="205dp"
-        android:id="@+id/touristlogin"
-        android:padding="10dp"
-        android:textColor="#fff"
-        android:text="As a Traveler"
-        android:background="@color/colorAccent"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/guidelogin" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="205dp"
+            android:id="@+id/touristlogin"
+            android:padding="10dp"
+            android:textColor="#fff"
+            android:text="As a Traveler"
+            android:background="@color/colorAccent"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/guidelogin" />
 
     <Button
         android:textColor="#fff"

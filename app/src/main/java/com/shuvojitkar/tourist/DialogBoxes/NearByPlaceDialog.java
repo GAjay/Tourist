@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Nuhel on 7/31/2017.
+ * Created by Nuhel on 8/3/2017.
  */
 
 public class NearByPlaceDialog {
@@ -157,9 +157,7 @@ public class NearByPlaceDialog {
             private TextView place_name, place_vicinity;
             public RecHolder(View itemView) {
                 super(itemView);
-                linearLayout = (LinearLayout) itemView.findViewById(R.id.list_main_layout);
 
-                linearLayout.setMinimumWidth(dialog.getWindow().getWindowManager().getDefaultDisplay().getWidth());
                 place_name = (TextView) itemView.findViewById(R.id.place_name);
                 place_vicinity = (TextView) itemView.findViewById(R.id.place_vicinity);
             }

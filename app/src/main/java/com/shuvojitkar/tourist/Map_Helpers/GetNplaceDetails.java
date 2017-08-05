@@ -60,8 +60,8 @@ public class GetNplaceDetails extends AsyncTask<Object, String, String> {
             String s = jsr.getString("icon").toString();
             String phone = jsr.getString("formatted_phone_number");
             placeDetails.setPhoneNumber(phone);
-            CircleImageView img = (CircleImageView) view.findViewById(R.id.list_place_image);
-            Picasso.with(img.getContext()).load(s).into(img);
+      /*     CircleImageView img = (CircleImageView) view.findViewById(R.id.list_place_image);
+            Picasso.with(img.getContext()).load(s).into(img);*/
         } catch (JSONException e) {
             placeDetails.setPhoneNumber("-1");
         }

@@ -1,6 +1,7 @@
 package com.shuvojitkar.tourist.Fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
+import com.shuvojitkar.tourist.Activity.UserTouristProfileActivity;
 import com.shuvojitkar.tourist.GetFirebaseRef;
 import com.shuvojitkar.tourist.Model.Person_list;
 import com.shuvojitkar.tourist.R;
@@ -63,6 +65,14 @@ public class Travler_list_fragment extends Fragment {
                         viewHolder.setImage(model.getImage());
                         viewHolder.setName(model.getName());
                         viewHolder.setStatus(model.getStatus());
+
+                        final String user_id = getRef(position).getKey();
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(v.getContext(),UserTouristProfileActivity.class).putExtra("user_id",user_id));
+                            }
+                        });
                     }
 
                     @Override
