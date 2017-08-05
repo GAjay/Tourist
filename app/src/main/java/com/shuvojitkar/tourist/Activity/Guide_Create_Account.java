@@ -35,7 +35,7 @@ public class Guide_Create_Account extends AppCompatActivity {
     private TextInputLayout mDisplayName,mPassowrd,mEmail;
     private String  AccountType ="touristGuide" ;
     private ArrayAdapter ar ;
-    String Place = "Dhaka";
+    String Place ;
     private  static Spinner mSpinner;
     private static DatabaseReference mDatabaseReference;
     private static Button mCreateAccountBtn;
@@ -48,6 +48,7 @@ public class Guide_Create_Account extends AppCompatActivity {
         setContentView(R.layout.activity_guide__create__account);
         cn = this;
         init();
+        mFirebaseAuth=  FirebaseAuth.getInstance();
         mCreateAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -98,7 +99,7 @@ public class Guide_Create_Account extends AppCompatActivity {
             @Override
             public void onComplete( Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    final String s ;
+
 
 
                     AlertDialog alertDialog = new AlertDialog.Builder(cn).create();

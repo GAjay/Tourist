@@ -126,7 +126,7 @@ public class User_profile_fragment extends Fragment {
                    // Toast.makeText(v.getContext(), "hgghho", Toast.LENGTH_SHORT).show();
                     String name = dataSnapshot.child(UserId).child("name").getValue().toString();
                     String status = dataSnapshot.child(UserId).child("status").getValue().toString();
-                    String image = dataSnapshot.child(UserId).child("thumb_image").getValue().toString();
+                    String image = dataSnapshot.child(UserId).child("image").getValue().toString();
                     UserNameTxt.setText(name);
                     UserStatusTxt.setText(status);
 

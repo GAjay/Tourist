@@ -26,37 +26,40 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserTouristProfileActivity extends AppCompatActivity {
-    private TextView mProfilename,mProfilestatus,mProfiletotalfriends;
-    private Button mProfileSendReqBtn,mProfileDeclinereqBtn;
+public class Guide_Profile_Activity extends AppCompatActivity {
+    private TextView mProfilename,mProfilestatus,mProfiletotalfriends,mArea;
+    private Button mProfileSendReqBtn,mProfileDeclinereqBtn,mHireButton;
     private ImageView mProfileImage;
     private ProgressDialog pd;
     private String mCurrentState;
 
+
+    private DatabaseReference mHireDatabase;
     private DatabaseReference mUserDatabase;
     private DatabaseReference mrootUserDatabase;
     private DatabaseReference mRootRef;
     private DatabaseReference mFriendsReqDatabase;
     private DatabaseReference mFriendDatabase;
-    private DatabaseReference mNotificationDatabase;
+    private DatabaseReference mNotificationDatabase,mHireReqDatabase;
     private FirebaseUser mCurrentUser;
 
     private String CurrentUserString;
-
-
+    private String mHireState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_tourist_profile);
+        setContentView(R.layout.activity_guide_profile);
         final String id = getIntent().getStringExtra("user_id");
         init();
+
 
         CurrentUserString = FirebaseAuth.getInstance().getCurrentUser().toString();
         if (CurrentUserString.equals("") || CurrentUserString.equals(null)) {
 
         } else {
 
-            mCurrentState ="not_friends";
+            mCurrentState = "not_friends";
+            mHireState = "not_hire";
 
             //First time set Decline button to invisible
             mProfileDeclinereqBtn.setVisibility(View.INVISIBLE);
@@ -66,11 +69,14 @@ public class UserTouristProfileActivity extends AppCompatActivity {
             pd.setTitle("Loading User Data");
             pd.setMessage("Please wait while er load the user data");
             pd.setCanceledOnTouchOutside(false);
-            if (haveNetworkConnection()==true){
+            if (haveNetworkConnection() == true) {
                 pd.show();
             }
 
             //Firebase Initialization
+            mHireDatabase = GetFirebaseRef.GetDbIns().getReference().child("Hire_Guide");
+            mHireReqDatabase = GetFirebaseRef.GetDbIns().getReference().child("hire_req");
+
             mFriendsReqDatabase = GetFirebaseRef.GetDbIns().getReference().child("Frnds_req");
             mFriendDatabase = GetFirebaseRef.GetDbIns().getReference().child("Friends");
             mUserDatabase = GetFirebaseRef.GetDbIns().getReference().child("touristGuide").child(id);
@@ -82,8 +88,6 @@ public class UserTouristProfileActivity extends AppCompatActivity {
             mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        //    mrootUserDatabase = GetFirebaseRef.GetDbIns().getReference().child("Users").child( FirebaseAuth.getInstance().getCurrentUser().getUid());
-
 
             //Read Data From Firebase
             mUserDatabase.addValueEventListener(new ValueEventListener() {
@@ -92,8 +96,10 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                     String Name = dataSnapshot.child("name").getValue().toString();
                     String Status = dataSnapshot.child("status").getValue().toString();
                     String Image = dataSnapshot.child("image").getValue().toString();
+                    String Area  = dataSnapshot.child("area").getValue().toString();
                     mProfilename.setText(Name);
                     mProfilestatus.setText(Status);
+                    mArea.setText("Area : "+Area);
 
                     if (!Image.equals("default")){
                         Picasso.with(getApplicationContext()).load(Image).placeholder(R.drawable.person2).into(mProfileImage);}
@@ -158,6 +164,62 @@ public class UserTouristProfileActivity extends AppCompatActivity {
 
                         }
                     });
+
+                    mHireReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            //------Friends List /Request Features
+                            mHireReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.hasChild(id)){
+                                        String req_type = dataSnapshot.child(id).child("req_type").getValue().toString();
+                                        if (req_type.equals("received")){
+                                            mHireState = "hire_received";
+                                            mHireButton.setText("Accept Hire Request");
+
+                                        }else if(req_type.equals("sent")){
+                                            mHireState = "hire_sent";
+                                            mHireButton.setText("Cancel Hire Request");
+
+
+                                        }
+                                    }else {
+                                        mHireReqDatabase.child(mCurrentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.hasChild(id)){
+                                                    mHireState = "hired";
+                                                    mHireButton.setText("Cancel the Deal");
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                                pd.dismiss();
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    pd.dismiss();
+                                }
+                            });
+
+                            pd.dismiss();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -178,7 +240,7 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                         DatabaseReference mNotificationRef= mRootRef.child("Notifications").child(id).push();
                         String  newNotificaitonID = mNotificationRef.getKey();
 
-                        HashMap<String,String>ntfmap = new HashMap<>();
+                        HashMap<String,String> ntfmap = new HashMap<>();
                         ntfmap.put("from",mCurrentUser.getUid());
                         ntfmap.put("type","request");
 
@@ -191,7 +253,7 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                                 if(databaseError!=null){
-                                   // Toast.makeText(ProfileActivity.this, "There was some error", Toast.LENGTH_SHORT).show();
+                                    // Toast.makeText(ProfileActivity.this, "There was some error", Toast.LENGTH_SHORT).show();
                                 }
                                 mProfileSendReqBtn.setEnabled(true);
                                 mCurrentState = "req_sent";
@@ -248,7 +310,7 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                                     mProfileDeclinereqBtn.setEnabled(false);
                                 }else {
                                     String error = databaseError.getMessage().toString();
-                                //    Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
+                                    //    Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
 
                                 }
                             }
@@ -277,7 +339,7 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                                     mProfileDeclinereqBtn.setEnabled(false);
                                 }else {
                                     String error = databaseError.getMessage().toString();
-                                 //   Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
+                                    //   Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
 
                                 }
                             }
@@ -286,28 +348,130 @@ public class UserTouristProfileActivity extends AppCompatActivity {
                 }
             });
 
+
+
+
+
+            mHireButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mHireButton.setEnabled(false);
+
+                    //  ------Not Friend State-----
+                    if (mHireState.equals("not_hire")){
+
+                        Map requestMap = new HashMap();
+                        requestMap.put("hire_req/"+mCurrentUser.getUid()+"/"+id+"/"+"req_type","sent");
+                        requestMap.put("hire_req/"+id+"/"+mCurrentUser.getUid()+"/"+"req_type","received");
+
+                        mRootRef.updateChildren(requestMap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if(databaseError!=null){
+                                    // Toast.makeText(ProfileActivity.this, "There was some error", Toast.LENGTH_SHORT).show();
+                                }
+                                mHireButton.setEnabled(true);
+                                mHireState= "hire_sent";
+                                mHireButton.setText("Cancel hire Request");
+                            }
+                        });
+                    }
+
+
+
+                    //  ------Cancel Request State-----
+                    if (mHireState.equals("hire_sent")){
+                        mHireReqDatabase.child(mCurrentUser.getUid()).child(id).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                                mFriendsReqDatabase.child(id).child(mCurrentUser.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mHireButton.setEnabled(true);
+                                        mHireState = "not_hire";
+                                        mHireButton.setText("Sent Hire Request");
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+
+
+                    // ------REQ RECEIVED STATE
+                    if (mHireState.equals("hire_received")){
+                        final String CurrentDate  = DateFormat.getDateTimeInstance().format(new Date());
+                        Map friendsmap = new HashMap();
+                        friendsmap.put("Hire_Guide/"+mCurrentUser.getUid()+"/"+id+"/date",CurrentDate);
+                        friendsmap.put("Hire_Guide/"+id+"/"+mCurrentUser.getUid()+"/date",CurrentDate);
+
+                        friendsmap.put("hire_req/"+mCurrentUser.getUid()+"/"+id,null);
+                        friendsmap.put("hire_req/"+id+"/"+mCurrentUser.getUid(),null);
+
+                        mRootRef.updateChildren(friendsmap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError ==null){
+                                    mHireButton.setEnabled(true);
+                                    mHireState = "hired";
+                                    mHireButton.setText("Cancel this Deal");
+
+
+                                }else {
+                                    String error = databaseError.getMessage().toString();
+                                    //    Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+
+                    }
+
+
+                    // ------FRIENDS STATE
+                    if (mHireState.equals("hired")){
+
+                        Map unFriendMap = new HashMap();
+                        unFriendMap.put("Hire_Guide/"+mCurrentUser.getUid()+"/"+id,null);
+                        unFriendMap.put("Hire_Guide/"+id+"/"+mCurrentUser.getUid(),null);
+
+                        mRootRef.updateChildren(unFriendMap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                if (databaseError ==null){
+                                    mHireButton.setEnabled(true);
+                                    mHireState = "not_hire";
+                                    mHireButton.setText("Cancel the Hire Requet");
+
+                                }else {
+                                    String error = databaseError.getMessage().toString();
+                                    //   Toast.makeText(ProfileActivity.this,error, Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+                    }
+
+
+
+                }
+            });
+
+
         }
-
-
-
-
-
-
-
     }
-
-
-
-
     private void init() {
 
         pd =new ProgressDialog(this);
-        mProfilename = (TextView) findViewById(R.id.profile_displayName);
-        mProfilestatus = (TextView) findViewById(R.id.profile_status);
-        mProfiletotalfriends = (TextView) findViewById(R.id.profile_totalfriends);
-        mProfileSendReqBtn = (Button) findViewById(R.id.profile_sendRequest);
-        mProfileDeclinereqBtn = (Button) findViewById(R.id.profile_declinereq);
-        mProfileImage = (ImageView) findViewById(R.id.profile_image);
+        mProfilename = (TextView) findViewById(R.id.guide_profile_displayName);
+        mProfilestatus = (TextView) findViewById(R.id.guide_profile_status);
+        mArea = (TextView) findViewById(R.id.guide_profile_area);
+        mProfileSendReqBtn = (Button) findViewById(R.id.guide_profile_sendRequest);
+        mProfileDeclinereqBtn = (Button) findViewById(R.id.guide_profile_declinereq);
+        mProfileImage = (ImageView) findViewById(R.id.guide_profile_image);
+        mHireButton = (Button) findViewById(R.id.guide_profile_hire);
     }
 
     private boolean haveNetworkConnection() {
