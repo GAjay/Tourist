@@ -1,8 +1,6 @@
 package com.shuvojitkar.tourist;
 
 import com.google.firebase.database.FirebaseDatabase;
-
-
 /**
  * Created by SHOBOJIT on 7/6/2017.
  */
