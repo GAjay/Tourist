@@ -50,6 +50,9 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".Activity.UserTouristProfileActivity" />
+        <activity android:name=".Activity.Create_Account_02" />
+        <activity android:name=".Activity.Tourist_Create_Account" />
+        <activity android:name=".Activity.Guide_Create_Account"></activity>
     </application>
 
 </manifest>

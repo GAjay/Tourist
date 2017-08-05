@@ -92,6 +92,8 @@ public class User_profile_fragment extends Fragment {
     CircleImageView UserProFileImage;
     Button UserEditSettingbtn;
 
+    String UserType;
+
     View v;
     View cn;
     @Override
@@ -102,7 +104,7 @@ public class User_profile_fragment extends Fragment {
         mUserProRec.setLayoutManager(new LinearLayoutManager(getContext()));
         cn=v;
 
-        //Runtmie Permission
+
 
 
         UserEditSettingbtn.setOnClickListener(new View.OnClickListener() {
@@ -128,10 +130,12 @@ public class User_profile_fragment extends Fragment {
                     UserNameTxt.setText(name);
                     UserStatusTxt.setText(status);
 
+                    UserType = "touristGuide";
+
                     if (!image.equals("")||!image.equals("default")){
                         Picasso.with(v.getContext()).load(image).placeholder(R.drawable.person2).into(UserProFileImage);
                     }
-                    Toast.makeText(v.getContext(), "TT", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(v.getContext(), "TT", Toast.LENGTH_SHORT).show();
                    // UserPostList("touristGuide",UserId);
 
 
@@ -152,9 +156,8 @@ public class User_profile_fragment extends Fragment {
                                 if (!image.equals("")||!image.equals("default")){
                                     Picasso.with(v.getContext()).load(image).placeholder(R.drawable.person2).into(UserProFileImage);
                                 }
-                                Toast.makeText(v.getContext(), "TT", Toast.LENGTH_SHORT).show();
 
-                               // UserPostList("tourist",UserId);
+                                UserType = "tourist";
                             }
 
 

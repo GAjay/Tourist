@@ -22,10 +22,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shuvojitkar.tourist.Activity.Create_Account_02;
 import com.shuvojitkar.tourist.Activity.LoginActivity;
 import com.shuvojitkar.tourist.Activity.ProfileActivity;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
+import com.shuvojitkar.tourist.Fragment.Search_Place_Fragment;
 import com.shuvojitkar.tourist.Fragment.TouristGuide_list_fragment;
 import com.shuvojitkar.tourist.Fragment.Travler_list_fragment;
 
@@ -163,6 +165,11 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(FragIndex!=5)
                 Load_Tourist_list();
         }
+        else if(menuitem==R.id.menu_search){
+            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+            if(FragIndex!=6)
+                Load_Search_frag();
+        }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -172,6 +179,28 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
         //================Fragment List===============
+    public void Load_Search_frag(){
+        FragIndex=6;
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        getSupportActionBar().setTitle("Search Place                   ");
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.homeframe,new Search_Place_Fragment(),"Search Place")
+                        .commit();
+            }
+        };
+
+        if(runnable!=null){
+            mHandler.post(runnable);
+        }
+
+    }
+
     public void LoadHomeFragment(){
         FragIndex=1;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -193,6 +222,7 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
 
     }
+
     public void Load_Register(){
         FragIndex=2;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
@@ -309,6 +339,9 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         else if(item.getItemId()==R.id.main_login_btn){
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
+     /*   else if(item.getItemId()==R.id.main_create_btn){
+            startActivity(new Intent(MainActivity.this, Create_Account_02.class));
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

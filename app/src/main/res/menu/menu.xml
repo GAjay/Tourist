@@ -5,6 +5,9 @@
     <item android:title="Home"
         android:id="@+id/menu_home"/>
 
+    <item android:title="Search Place"
+        android:id="@+id/menu_search"/>
+
     <item
         android:id="@+id/menu_create_account"
         android:title="Create Account" />
