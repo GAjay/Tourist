@@ -33,7 +33,6 @@ import java.util.HashMap;
 
 public class Tourist_Create_Account extends AppCompatActivity {
     private TextInputLayout mDisplayName,mPassowrd,mEmail;
-    private String  AccountType ="Tourist Guide" ;
     private ArrayAdapter ar ;
     private  static Spinner mSpinner;
     private static DatabaseReference mDatabaseReference;

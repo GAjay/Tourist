@@ -99,7 +99,36 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         return haveConnectedWifi || haveConnectedMobile;
     }
 
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        if(FragIndex==1){
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Alert");
 
+            alertDialog.setMessage("Are you sure you want to exit?");
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+
+        }else{
+            LoadHomeFragment();
+        }
+    }
 
 
     //=================Navigation Drawer Click Listener===============
@@ -165,10 +194,13 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(FragIndex!=5)
                 Load_Tourist_list();
         }
-        else if(menuitem==R.id.menu_search){
+    /*    else if(menuitem==R.id.menu_search){
             Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=6)
                 Load_Search_frag();
+        }*/
+        else if(menuitem==R.id.menu_exit){
+           finish();
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

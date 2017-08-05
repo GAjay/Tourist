@@ -146,7 +146,7 @@ public class User_profile_fragment extends Fragment {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.child(UserId).exists()){
 
-                                Toast.makeText(v.getContext(), "hgghho", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(v.getContext(), "hgghho", Toast.LENGTH_SHORT).show();
                                 String name = dataSnapshot.child(UserId).child("name").getValue().toString();
                                 String status = dataSnapshot.child(UserId).child("status").getValue().toString();
                                 String image = dataSnapshot.child(UserId).child("image").getValue().toString();

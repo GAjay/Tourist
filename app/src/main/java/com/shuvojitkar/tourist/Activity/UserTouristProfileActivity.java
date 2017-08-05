@@ -73,7 +73,7 @@ public class UserTouristProfileActivity extends AppCompatActivity {
             //Firebase Initialization
             mFriendsReqDatabase = GetFirebaseRef.GetDbIns().getReference().child("Frnds_req");
             mFriendDatabase = GetFirebaseRef.GetDbIns().getReference().child("Friends");
-            mUserDatabase = GetFirebaseRef.GetDbIns().getReference().child("touristGuide").child(id);
+            mUserDatabase = GetFirebaseRef.GetDbIns().getReference().child("tourist").child(id);
             mNotificationDatabase = GetFirebaseRef.GetDbIns().getReference().child("Notifications");
             mRootRef = GetFirebaseRef.GetDbIns().getReference();
 
