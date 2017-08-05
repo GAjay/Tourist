@@ -65,13 +65,11 @@ public class NearByPlaceDialog {
         view = activity.getLayoutInflater().inflate(R.layout.nearby_place_dialog, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.recview);
         linearLayoutManager = new LinearLayoutManager(activity);
-        // linearLayoutManager.setAutoMeasureEnabled(false);
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         RecyclerAdapter adapter = new RecyclerAdapter();
         recyclerView.setAdapter(adapter);
-
-        // recyclerView.setHasFixedSize(true);
 
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -115,7 +113,7 @@ public class NearByPlaceDialog {
     }
 
 
-    class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecHolder> {
+    public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecHolder> {
 
         @Override
         public RecyclerAdapter.RecHolder onCreateViewHolder(ViewGroup parent, int viewType) {

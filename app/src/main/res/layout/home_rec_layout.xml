@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_margin="10dp"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-<RelativeLayout
-    android:padding="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
-    <ImageView
-        android:id="@+id/home_rec_imageView"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/campus"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-    <TextView
-        android:text="BisnaKandi"
-        android:background="#5d000000"
-        android:textSize="30sp"
-        android:id="@+id/home_rec_place_name"
-        android:gravity="center"
-        android:textColor="#d2d2d2"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/home_rec_imageView"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/home_rec_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/campus" />
+
+        <TextView
+            android:id="@+id/home_rec_place_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/home_rec_imageView"
+            android:layout_alignParentStart="true"
+            android:background="#5d000000"
+            android:gravity="center"
+            android:text="BisnaKandi"
+            android:textColor="#d2d2d2"
+            android:textSize="30sp" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
