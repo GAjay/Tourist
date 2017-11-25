@@ -76,7 +76,7 @@ public class User_friends_fragment extends Fragment {
                                             viewHolder.setImage(Image);
                                             viewHolder.setName(Name);
                                             viewHolder.setStatus(Status);
-                                            Toast.makeText(v.getContext(), Name, Toast.LENGTH_SHORT).show();
+                                       //     Toast.makeText(v.getContext(), Name, Toast.LENGTH_SHORT).show();
                                         }
 
                                         @Override

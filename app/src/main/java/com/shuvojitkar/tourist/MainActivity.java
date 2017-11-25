@@ -185,17 +185,17 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
         }
 
         else if(menuitem==R.id.menu_guide){
-            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=4)
                 Load_Guide_list();
         }
         else if(menuitem==R.id.menu_tourist){
-            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+       //     Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=5)
                 Load_Tourist_list();
         }
     /*    else if(menuitem==R.id.menu_search){
-            Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(this, "Index : "+FragIndex, Toast.LENGTH_SHORT).show();
             if(FragIndex!=6)
                 Load_Search_frag();
         }*/

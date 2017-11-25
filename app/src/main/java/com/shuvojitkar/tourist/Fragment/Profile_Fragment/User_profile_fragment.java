@@ -216,7 +216,7 @@ public class User_profile_fragment extends Fragment {
 
                         }   else {
                                 if (resultUri==null){
-                                    Toast.makeText(v.getContext(), "Nullaaaaaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
+                                //    Toast.makeText(v.getContext(), "Nullaaaaaaaaaaaaaaaaa", Toast.LENGTH_SHORT).show();
 
                                 }else {
                                     dialog.hide();
@@ -376,7 +376,7 @@ public class User_profile_fragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(UserId).exists()){
                     UserPostList("tourist",UserId);
-                    Toast.makeText(v.getContext(), "Called", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(v.getContext(), "Called", Toast.LENGTH_SHORT).show();
 
 
                 }else {
@@ -386,7 +386,7 @@ public class User_profile_fragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             UserPostList("touristGuide",UserId);
-                            Toast.makeText(v.getContext(), "Called", Toast.LENGTH_SHORT).show();
+                   //         Toast.makeText(v.getContext(), "Called", Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -481,7 +481,7 @@ public class User_profile_fragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String userProimg = dataSnapshot.child("image").getValue().toString();
                         String name = dataSnapshot.child("name").getValue().toString();
-                        Toast.makeText(v.getContext(), name, Toast.LENGTH_SHORT).show();
+                 //       Toast.makeText(v.getContext(), name, Toast.LENGTH_SHORT).show();
 
                         viewHolder.setUserproImage(userProimg);
                         viewHolder.setUserName(name);
