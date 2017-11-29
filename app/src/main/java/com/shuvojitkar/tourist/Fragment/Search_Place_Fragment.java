@@ -15,6 +15,7 @@ import com.shuvojitkar.tourist.R;
 
 public class Search_Place_Fragment extends Fragment {
     private static View v;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 

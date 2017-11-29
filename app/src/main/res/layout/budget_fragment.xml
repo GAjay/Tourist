@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:text="One Person "
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:padding="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="From"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Destination"
+                            android:layout_width="0dp"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Expected Cost"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView6" />
+
+                        <TextView
+                            android:text="Bisnakandi"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+
+                        <TextView
+                            android:text="Tk. 1500"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView8" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Lalakhal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Tk. 2000"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/t6" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:text="Sreemangal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:text="Tk. 1700"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                    </TableRow>
+
+               </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v4.widget.Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/space" />
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:text="Two Person "
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:padding="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="From"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Destination"
+                            android:layout_width="0dp"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Expected Cost"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView6" />
+
+                        <TextView
+                            android:text="Bisnakandi"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+
+                        <TextView
+                            android:text="Tk. 1500"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView8" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Lalakhal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Tk. 2000"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/t6" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:text="Sreemangal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:text="Tk. 1700"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:text="Three Person "
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:background="@color/colorPrimary"
+                    android:layout_height="wrap_content" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:padding="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_height="wrap_content">
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="From"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Destination"
+                            android:layout_width="0dp"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Expected Cost"
+                            android:textSize="15sp"
+                            android:textColor="#000"
+                            android:textStyle="bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView6" />
+
+                        <TextView
+                            android:text="Bisnakandi"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+
+                        <TextView
+                            android:text="Tk. 1500"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/textView8" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Lalakhal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            />
+                        <TextView
+                            android:text="Tk. 2000"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:id="@+id/t6" />
+                    </TableRow>
+                    <android.support.v4.widget.Space
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp" />
+                    <TableRow android:orientation="horizontal">
+                        <TextView
+                            android:text="Sylhet"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                        <TextView
+                            android:text="Sreemangal"
+                            android:layout_width="0dp"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                        <TextView
+                            android:text="Tk. 1700"
+                            android:textSize="12sp"
+                            android:textColor="#000"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"/>
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+</ScrollView>

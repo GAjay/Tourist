@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.shuvojitkar.tourist.Activity.Create_Account_02;
 import com.shuvojitkar.tourist.Activity.LoginActivity;
 import com.shuvojitkar.tourist.Activity.ProfileActivity;
+import com.shuvojitkar.tourist.Fragment.Estimated_budget_Fragment;
 import com.shuvojitkar.tourist.Fragment.Home_Fragment;
 import com.shuvojitkar.tourist.Fragment.Register_Fragment;
 import com.shuvojitkar.tourist.Fragment.Search_Place_Fragment;
@@ -199,6 +200,10 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
             if(FragIndex!=6)
                 Load_Search_frag();
         }*/
+        else if(menuitem==R.id.menu_estimated_budget){
+            if(FragIndex!=6)
+                Load_Budget();
+        }
         else if(menuitem==R.id.menu_exit){
            finish();
         }
@@ -211,18 +216,18 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
 
 
         //================Fragment List===============
-    public void Load_Search_frag(){
+    public void Load_Budget(){
         FragIndex=6;
         if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
-        getSupportActionBar().setTitle("Search Place                   ");
+        getSupportActionBar().setTitle("Estimated Budget");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.homeframe,new Search_Place_Fragment(),"Search Place")
+                        .replace(R.id.homeframe,new Estimated_budget_Fragment(),"Estimated Budget")
                         .commit();
             }
         };
